@@ -1,0 +1,101 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: system-ui, sans-serif;
+  }
+  
+  body {
+    @apply bg-neutral-50 text-neutral-900;
+  }
+  
+  /* Respect reduced motion preferences */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-primary-600 hover:bg-primary-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+  }
+  
+  .btn-secondary {
+    @apply bg-white hover:bg-neutral-50 text-neutral-700 font-medium py-2 px-4 rounded-lg border border-neutral-300 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+  }
+  
+  .btn-ghost {
+    @apply text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 font-medium py-2 px-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+  }
+  
+  .card {
+    @apply bg-white rounded-xl shadow-sm border border-neutral-200 p-6;
+  }
+  
+  .input-field {
+    @apply w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent;
+  }
+  
+  .likert-scale {
+    @apply flex items-center space-x-2;
+  }
+  
+  .likert-option {
+    @apply flex-1 text-center py-3 px-2 rounded-lg border-2 border-transparent hover:border-primary-200 cursor-pointer transition-colors duration-200;
+  }
+  
+  .likert-option.selected {
+    @apply border-primary-500 bg-primary-50;
+  }
+  
+  .progress-bar {
+    @apply w-full bg-neutral-200 rounded-full h-2;
+  }
+  
+  .progress-fill {
+    @apply bg-primary-600 h-2 rounded-full transition-all duration-300 ease-out;
+  }
+  
+  .confidence-meter {
+    @apply w-full bg-neutral-200 rounded-full h-3;
+  }
+  
+  .confidence-fill {
+    @apply h-3 rounded-full transition-all duration-300 ease-out;
+  }
+  
+  .confidence-high {
+    @apply bg-green-500;
+  }
+  
+  .confidence-medium {
+    @apply bg-yellow-500;
+  }
+  
+  .confidence-low {
+    @apply bg-red-500;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}

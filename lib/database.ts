@@ -1,0 +1,251 @@
+import { supabase } from './supabase';
+import { QuizSession, Answer, AxisScore } from './types';
+import { calculateScores } from './scoring';
+
+/**
+ * Creates an anonymous session for quiz taking
+ */
+export async function createAnonymousSession(): Promise<string> {
+  const anonKey = crypto.randomUUID();
+  
+  const { data, error } = await supabase
+    .from('sessions')
+    .insert({ anon_key: anonKey })
+    .select('id')
+    .single();
+
+  if (error) {
+    console.error('Error creating session:', error);
+    throw new Error('Failed to create session');
+  }
+
+  return data.id;
+}
+
+/**
+ * Saves quiz results to database
+ */
+export async function saveQuizResults(
+  session: QuizSession,
+  scores: AxisScore[]
+): Promise<string> {
+  console.log('saveQuizResults called with session:', session.id, 'scores:', scores.length);
+  
+  const { data: { user } } = await supabase.auth.getUser();
+  console.log('Current user:', user?.id);
+  
+  // Create quiz record
+  console.log('Creating quiz record...');
+  const { data: quizData, error: quizError } = await supabase
+    .from('quizzes')
+    .insert({
+      profile_id: user?.id,
+      session_id: session.id,
+      version: '1.0',
+      duration_ms: session.durationMs,
+      importance_weights: session.importanceWeights,
+    })
+    .select('id')
+    .single();
+
+  if (quizError) {
+    console.error('Error saving quiz:', quizError);
+    throw new Error('Failed to save quiz');
+  }
+
+  console.log('Quiz created successfully with ID:', quizData.id);
+  const quizId = quizData.id;
+
+  // Save answers
+  console.log('Saving answers...');
+  const answerInserts = session.answers.map(answer => ({
+    quiz_id: quizId,
+    question_id: answer.questionId,
+    value: answer.value,
+  }));
+
+  const { error: answersError } = await supabase
+    .from('answers')
+    .insert(answerInserts);
+
+  if (answersError) {
+    console.error('Error saving answers:', answersError);
+    throw new Error('Failed to save answers');
+  }
+
+  console.log('Answers saved successfully');
+
+  // Save scores
+  console.log('Saving scores...');
+  const scoreInserts = scores.map(score => ({
+    quiz_id: quizId,
+    axis: score.axis,
+    score: score.score,
+    confidence: score.confidence,
+  }));
+
+  const { error: scoresError } = await supabase
+    .from('scores')
+    .insert(scoreInserts);
+
+  if (scoresError) {
+    console.error('Error saving scores:', scoresError);
+    throw new Error('Failed to save scores');
+  }
+
+  console.log('Scores saved successfully, returning quiz ID:', quizId);
+  return quizId;
+}
+
+/**
+ * Retrieves quiz history for authenticated user
+ */
+export async function getQuizHistory(): Promise<Array<{
+  id: string;
+  createdAt: Date;
+  scores: AxisScore[];
+  tags: string[];
+}>> {
+  const { data: { user } } = await supabase.auth.getUser();
+  
+  if (!user) {
+    return [];
+  }
+
+  const { data: quizzes, error } = await supabase
+    .from('quizzes')
+    .select(`
+      id,
+      created_at,
+      scores (
+        axis,
+        score,
+        confidence
+      )
+    `)
+    .eq('profile_id', user.id)
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error('Error fetching quiz history:', error);
+    return [];
+  }
+
+  return quizzes.map(quiz => ({
+    id: quiz.id,
+    createdAt: new Date(quiz.created_at),
+    scores: quiz.scores.map((score: any) => ({
+      axis: score.axis,
+      score: score.score,
+      confidence: score.confidence,
+    })),
+    tags: [], // Will be calculated client-side
+  }));
+}
+
+/**
+ * Retrieves quiz results by ID
+ */
+export async function getQuizResults(quizId: string): Promise<{
+  scores: AxisScore[];
+  answers: Answer[];
+  createdAt: Date;
+} | null> {
+  const { data: quiz, error: quizError } = await supabase
+    .from('quizzes')
+    .select('created_at')
+    .eq('id', quizId)
+    .single();
+
+  if (quizError) {
+    console.error('Error fetching quiz:', quizError);
+    return null;
+  }
+
+  const { data: scores, error: scoresError } = await supabase
+    .from('scores')
+    .select('axis, score, confidence')
+    .eq('quiz_id', quizId);
+
+  if (scoresError) {
+    console.error('Error fetching scores:', scoresError);
+    return null;
+  }
+
+  const { data: answers, error: answersError } = await supabase
+    .from('answers')
+    .select('question_id, value')
+    .eq('quiz_id', quizId);
+
+  if (answersError) {
+    console.error('Error fetching answers:', answersError);
+    return null;
+  }
+
+  return {
+    scores: scores.map((score: any) => ({
+      axis: score.axis,
+      score: score.score,
+      confidence: score.confidence,
+    })),
+    answers: answers.map((answer: any) => ({
+      questionId: answer.question_id,
+      value: answer.value,
+    })),
+    createdAt: new Date(quiz.created_at),
+  };
+}
+
+/**
+ * Creates or updates user profile
+ */
+export async function upsertProfile(profile: {
+  id: string;
+  email?: string;
+  name?: string;
+  avatarUrl?: string;
+}): Promise<void> {
+  const { error } = await supabase
+    .from('profiles')
+    .upsert({
+      id: profile.id,
+      email: profile.email,
+      name: profile.name,
+      avatar_url: profile.avatarUrl,
+    });
+
+  if (error) {
+    console.error('Error upserting profile:', error);
+    throw new Error('Failed to save profile');
+  }
+}
+
+/**
+ * Gets user profile
+ */
+export async function getProfile(userId: string): Promise<{
+  id: string;
+  email?: string;
+  name?: string;
+  avatarUrl?: string;
+  createdAt: Date;
+} | null> {
+  const { data, error } = await supabase
+    .from('profiles')
+    .select('*')
+    .eq('id', userId)
+    .single();
+
+  if (error) {
+    console.error('Error fetching profile:', error);
+    return null;
+  }
+
+  return {
+    id: data.id,
+    email: data.email,
+    name: data.name,
+    avatarUrl: data.avatar_url,
+    createdAt: new Date(data.created_at),
+  };
+}
