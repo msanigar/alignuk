@@ -112,6 +112,8 @@ export async function getQuizHistory(): Promise<Array<{
     return [];
   }
 
+  console.log('getQuizHistory: Fetching for user:', user.id);
+
   const { data: quizzes, error } = await supabase
     .from('quizzes')
     .select(`
@@ -130,6 +132,15 @@ export async function getQuizHistory(): Promise<Array<{
     console.error('Error fetching quiz history:', error);
     return [];
   }
+
+  console.log('getQuizHistory: Found quizzes:', quizzes?.length, 'quizzes');
+  quizzes?.forEach(quiz => {
+    console.log(`Quiz ${quiz.id}:`, {
+      createdAt: quiz.created_at,
+      scoresCount: quiz.scores?.length,
+      scores: quiz.scores?.map(s => `${s.axis}:${s.score}`).join(', ')
+    });
+  });
 
   return quizzes.map(quiz => ({
     id: quiz.id,
@@ -151,6 +162,8 @@ export async function getQuizResults(quizId: string): Promise<{
   answers: Answer[];
   createdAt: Date;
 } | null> {
+  console.log('getQuizResults: Fetching quiz:', quizId);
+
   const { data: quiz, error: quizError } = await supabase
     .from('quizzes')
     .select('created_at')
@@ -181,6 +194,14 @@ export async function getQuizResults(quizId: string): Promise<{
     console.error('Error fetching answers:', answersError);
     return null;
   }
+
+  console.log('getQuizResults: Quiz data:', {
+    quizId,
+    createdAt: quiz.created_at,
+    scoresCount: scores?.length,
+    scores: scores?.map(s => `${s.axis}:${s.score}`).join(', '),
+    answersCount: answers?.length
+  });
 
   return {
     scores: scores.map((score: any) => ({

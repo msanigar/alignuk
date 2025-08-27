@@ -234,7 +234,7 @@ export default function QuizResultsPage() {
               userScores={convertScoresToVector6(results.scores)} 
               answers={results.answers.reduce((acc, answer) => {
                 // Convert Likert 1-7 to -3 to +3 scale
-                acc[answer.question_id] = answer.value - 4;
+                acc[answer.questionId] = answer.value - 4;
                 return acc;
               }, {} as Record<string, number>)}
             />

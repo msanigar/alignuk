@@ -28,6 +28,12 @@ export function PartyMatches({
     axisWeights,
   });
 
+  console.log('PartyMatches: Input data:', {
+    userScores,
+    hasAnswers: !!answers,
+    answersCount: answers ? Object.keys(answers).length : 0
+  });
+
   // Step 2: Build non-negotiables from extreme answers (Likert ±3)
   const nn = answers ? buildNonNegotiables(answers, {
     extremeThreshold: 3,
@@ -35,12 +41,16 @@ export function PartyMatches({
     capStrength: 1.0,
   }) : [];
 
+  console.log('PartyMatches: Non-negotiables:', nn.length, nn.map(n => `${n.policy}:${n.direction}`));
+
   // Step 3: Apply non-negotiables (soft penalty by default)
   const { adjusted: ranked, notes } = applyNonNegotiables(baseMatches, nn, {
     mode: 'soft', // switch to 'hard' to veto
     lambda: 2.0,
     minKeep: 1,
   });
+
+  console.log('PartyMatches: Final rankings:', ranked.slice(0, 3).map(r => `${r.partyName}:${r.percent}%`));
 
   const clustered = isClustered(userScores, PARTY_VECTORS, axisWeights, 0.04);
 
