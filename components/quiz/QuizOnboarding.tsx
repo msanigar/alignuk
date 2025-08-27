@@ -253,7 +253,7 @@ export function QuizOnboarding({ onStart, onQuickTest }: QuizOnboardingProps) {
               {user ? `Start ${selectedVersion === 'lite' ? 'Lite' : 'Full'} Quiz (Results will be saved)` : `Start ${selectedVersion === 'lite' ? 'Lite' : 'Full'} Quiz (Anonymous)`}
             </button>
             
-            {onQuickTest && (
+            {onQuickTest && typeof window !== 'undefined' && window.location.hostname === 'localhost' && (
               <button
                 onClick={onQuickTest}
                 className="bg-orange-500 hover:bg-orange-600 text-white text-lg px-8 py-4 rounded-lg font-medium transition-colors"
