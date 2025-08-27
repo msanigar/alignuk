@@ -95,8 +95,8 @@ export function QuizResults() {
   }
 
   return (
-    <div className="min-h-screen bg-neutral-50 py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-neutral-50 py-6 sm:py-8">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -104,17 +104,17 @@ export function QuizResults() {
           transition={{ duration: 0.6 }}
           className="text-center mb-8"
         >
-          <h1 className="text-4xl md:text-5xl font-bold text-neutral-900 mb-4">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-neutral-900 mb-4">
             Your Political Alignment
           </h1>
           {results.overallSummary && (
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-6">
-              <p className="text-lg text-blue-900 leading-relaxed">
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 sm:p-6 mb-6">
+              <p className="text-base sm:text-lg text-blue-900 leading-relaxed">
                 {results.overallSummary}
               </p>
             </div>
           )}
-          <p className="text-xl text-neutral-600 mb-6">
+          <p className="text-base sm:text-lg md:text-xl text-neutral-600 mb-6">
             Here's how your views align across six key dimensions of UK politics
           </p>
           
@@ -156,7 +156,7 @@ export function QuizResults() {
         {/* Results Grid */}
         <div className="space-y-8">
           {/* Charts and Party Matching */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
             {/* Charts */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}

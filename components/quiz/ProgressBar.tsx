@@ -13,10 +13,10 @@ export function ProgressBar({ current, total }: ProgressBarProps) {
   return (
     <div className="w-full">
       <div className="flex justify-between items-center mb-2">
-        <span className="text-sm font-medium text-neutral-700">
+        <span className="text-xs sm:text-sm font-medium text-neutral-700">
           Progress
         </span>
-        <span className="text-sm text-neutral-500">
+        <span className="text-xs sm:text-sm text-neutral-500">
           {current} of {total}
         </span>
       </div>

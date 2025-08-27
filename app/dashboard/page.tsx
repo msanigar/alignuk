@@ -70,18 +70,18 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen py-12">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen py-8 sm:py-12">
+      <div className="max-w-4xl mx-auto px-3 sm:px-4 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           className="text-center mb-12"
         >
-          <h1 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-4">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-neutral-900 mb-4">
             Your Quiz History
           </h1>
-          <p className="text-lg text-neutral-600">
+          <p className="text-base sm:text-lg text-neutral-600">
             Track your political alignment over time and see how your views evolve.
           </p>
         </motion.div>
@@ -114,7 +114,7 @@ export default function DashboardPage() {
               >
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between">
                   <div className="flex-1">
-                    <div className="flex items-center space-x-4 mb-3">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4 space-y-1 sm:space-y-0 mb-3">
                       <div className="flex items-center space-x-2 text-sm text-neutral-500">
                         <Calendar className="w-4 h-4" />
                         <span>

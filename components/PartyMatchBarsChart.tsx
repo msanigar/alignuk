@@ -38,7 +38,7 @@ export default function PartyMatchBarsChart({ data }: { data: MatchDatum[] }) {
   const sorted = [...data].sort((a, b) => b.percent - a.percent);
 
   return (
-    <div className="w-full h-64 md:h-80">
+    <div className="w-full h-56 sm:h-64 md:h-80">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart
           data={sorted}
@@ -49,7 +49,7 @@ export default function PartyMatchBarsChart({ data }: { data: MatchDatum[] }) {
           <YAxis
             type="category"
             dataKey="name"
-            width={120}
+            width={100}
             tick={(props) => {
               const { x, y, payload } = props;
               const isTopParty = payload.value === sorted[0]?.name;
@@ -61,7 +61,7 @@ export default function PartyMatchBarsChart({ data }: { data: MatchDatum[] }) {
                     dy={4}
                     textAnchor="end"
                     fill={isTopParty ? '#1f2937' : '#6b7280'}
-                    fontSize={isTopParty ? 13 : 12}
+                    fontSize={isTopParty ? 12 : 11}
                     fontWeight={isTopParty ? '600' : '400'}
                   >
                     {payload.value}

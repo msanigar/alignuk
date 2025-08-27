@@ -67,8 +67,8 @@ export function QuizQuestions({
   };
 
   return (
-    <div className="min-h-screen bg-neutral-50 py-8">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-neutral-50 py-4 sm:py-8">
+      <div className="max-w-4xl mx-auto px-3 sm:px-4 lg:px-8">
         {/* Progress Bar */}
         <ProgressBar current={questionNumber} total={totalQuestions} />
         
@@ -79,7 +79,7 @@ export function QuizQuestions({
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: -20 }}
           transition={{ duration: 0.3 }}
-          className="card mt-8"
+          className="card mt-4 sm:mt-8"
         >
           {/* Question Header */}
           <div className="mb-6">
@@ -91,13 +91,13 @@ export function QuizQuestions({
             </div>
             
             <h2 
-              className="text-xl md:text-2xl font-semibold text-neutral-900 leading-relaxed"
+              className="text-lg sm:text-xl md:text-2xl font-semibold text-neutral-900 leading-relaxed"
               dangerouslySetInnerHTML={{ __html: highlightTerms(currentQuestion.text) }}
             />
             
             {currentQuestion.stat && (
-              <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                <p className="text-sm text-blue-800">
+              <div className="mt-4 p-3 sm:p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                <p className="text-xs sm:text-sm text-blue-800">
                   <strong>UK Context:</strong> {currentQuestion.stat}
                   {currentQuestion.sources && (
                     <button
@@ -114,9 +114,9 @@ export function QuizQuestions({
 
           {/* Likert Scale */}
           <div className="space-y-3">
-            <div className="flex justify-between text-sm text-neutral-600 mb-4">
-              <span>Strongly Disagree</span>
-              <span>Strongly Agree</span>
+            <div className="flex justify-between text-sm text-neutral-600 mb-4 px-1">
+              <span className="text-xs sm:text-sm">Strongly Disagree</span>
+              <span className="text-xs sm:text-sm">Strongly Agree</span>
             </div>
             
             <div className="likert-scale">
@@ -129,11 +129,14 @@ export function QuizQuestions({
                     selectedValue === value ? 'selected' : ''
                   } ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
                 >
-                  <div className="text-lg font-semibold text-neutral-700 mb-1">
+                  <div className="text-base md:text-lg font-semibold text-neutral-700 mb-1">
                     {value}
                   </div>
-                  <div className="text-xs text-neutral-500 leading-tight">
+                  <div className="text-xs text-neutral-500 leading-tight hidden sm:block">
                     {likertLabels[value - 1]}
+                  </div>
+                  <div className="text-xs text-neutral-500 leading-tight sm:hidden">
+                    {likertLabels[value - 1].split(' ')[0]}
                   </div>
                 </button>
               ))}

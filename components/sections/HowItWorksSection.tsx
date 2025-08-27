@@ -38,7 +38,7 @@ const steps = [
 
 export function HowItWorksSection() {
   return (
-    <section className="py-20 bg-neutral-50">
+    <section className="py-12 sm:py-20 bg-neutral-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -47,15 +47,15 @@ export function HowItWorksSection() {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-4">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-neutral-900 mb-4">
             How It Works
           </h2>
-          <p className="text-xl text-neutral-600 max-w-3xl mx-auto">
+          <p className="text-lg sm:text-xl text-neutral-600 max-w-3xl mx-auto">
             Our methodology combines political science research with modern technology to provide accurate, meaningful results.
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12">
           <div className="space-y-8">
             {steps.map((step, index) => (
               <motion.div
@@ -91,7 +91,7 @@ export function HowItWorksSection() {
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             viewport={{ once: true }}
-            className="bg-white rounded-xl p-8 shadow-lg"
+            className="bg-white rounded-xl p-6 sm:p-8 shadow-lg"
           >
             <h3 className="text-2xl font-bold text-neutral-900 mb-6">
               Our Methodology

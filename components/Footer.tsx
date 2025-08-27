@@ -8,11 +8,11 @@ export function Footer() {
 
   return (
     <footer className="bg-neutral-900 text-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
           <div className="col-span-1 md:col-span-2">
-            <h3 className="text-xl font-bold text-primary-400 mb-4">AlignUK</h3>
-            <p className="text-neutral-300 mb-4 max-w-md">
+            <h3 className="text-lg sm:text-xl font-bold text-primary-400 mb-3 sm:mb-4">AlignUK</h3>
+            <p className="text-sm sm:text-base text-neutral-300 mb-4 max-w-md">
               Discover your political alignment across six key dimensions in UK politics. 
               Our evidence-based quiz provides neutral, privacy-focused insights into your political views.
             </p>

@@ -30,7 +30,7 @@ export function HeroSection() {
             <div className="flex justify-center mb-6">
               <Logo size="lg" />
             </div>
-            <h1 className="text-4xl md:text-6xl font-bold text-neutral-900 mb-6">
+            <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold text-neutral-900 mb-6">
               Discover Your{' '}
               <span className="text-primary-600">Political Alignment</span>
             </h1>
@@ -41,7 +41,7 @@ export function HeroSection() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <p className="text-xl md:text-2xl text-neutral-700 mb-8 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-lg sm:text-xl md:text-2xl text-neutral-700 mb-8 max-w-3xl mx-auto leading-relaxed px-4 sm:px-0">
               Take our evidence-based UK political alignment quiz to understand where you stand on six key dimensions: economic, social, authority, sovereignty, environment, and welfare. Choose between our Lite (36 questions) or Full (60 questions) versions. Get matched with UK political parties based on your results.
             </p>
           </motion.div>
@@ -50,7 +50,7 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+            className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center px-4 sm:px-0"
           >
             <Link href="/quiz" className="btn-primary text-lg px-8 py-4">
               Start Quiz Now
@@ -75,8 +75,8 @@ export function HeroSection() {
             transition={{ duration: 0.6, delay: 0.6 }}
             className="mt-12 text-sm text-neutral-600"
           >
-            <p>✓ Evidence-based questions • ✓ Neutral and unbiased • ✓ Privacy-focused • ✓ Party matching</p>
-            <p className="mt-2">Lite version: 36 questions (~5 min) • Full version: 60 questions (~8 min)</p>
+            <p className="text-xs sm:text-sm">✓ Evidence-based questions • ✓ Neutral and unbiased • ✓ Privacy-focused • ✓ Party matching</p>
+            <p className="mt-2 text-xs sm:text-sm">Lite version: 36 questions (~5 min) • Full version: 60 questions (~8 min)</p>
           </motion.div>
         </div>
       </div>
