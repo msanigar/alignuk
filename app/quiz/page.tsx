@@ -32,6 +32,7 @@ export default function QuizPage() {
   useEffect(() => {
     const initSession = async () => {
       try {
+        console.log('Quiz: Creating anonymous session...');
         const sessionId = await createAnonymousSession();
         setSession({
           id: sessionId,
@@ -40,6 +41,12 @@ export default function QuizPage() {
         });
       } catch (error) {
         console.error('Failed to create session:', error);
+        // Create a fallback session to prevent infinite loading
+        setSession({
+          id: 'fallback-session',
+          answers: [],
+          createdAt: new Date(),
+        });
       }
     };
 

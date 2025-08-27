@@ -24,35 +24,68 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     // Get initial session
     const getInitialSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      setUser(session?.user ?? null);
-      
-      if (session?.user) {
-        const userProfile = await getProfile(session.user.id);
-        setProfile(userProfile);
+      try {
+        console.log('AuthProvider: Getting initial session...');
+        const { data: { session }, error } = await supabase.auth.getSession();
+        
+        if (error) {
+          console.error('AuthProvider: Error getting session:', error);
+        }
+        
+        setUser(session?.user ?? null);
+        
+        if (session?.user) {
+          try {
+            console.log('AuthProvider: Getting user profile...');
+            const userProfile = await getProfile(session.user.id);
+            setProfile(userProfile);
+          } catch (profileError) {
+            console.error('AuthProvider: Error getting profile:', profileError);
+            // Don't fail the entire auth process if profile fails
+            setProfile(null);
+          }
+        }
+      } catch (error) {
+        console.error('AuthProvider: Error in getInitialSession:', error);
+      } finally {
+        console.log('AuthProvider: Setting loading to false');
+        setLoading(false);
       }
-      
-      setLoading(false);
     };
 
+    // Add a timeout to prevent infinite loading
+    const timeoutId = setTimeout(() => {
+      console.log('AuthProvider: Timeout reached, setting loading to false');
+      setLoading(false);
+    }, 10000); // 10 second timeout
+
     getInitialSession();
+
+    return () => clearTimeout(timeoutId);
 
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
+        console.log('AuthProvider: Auth state change:', event, session?.user?.id);
         setUser(session?.user ?? null);
         
         if (session?.user) {
-          // Create or update profile
-          await upsertProfile({
-            id: session.user.id,
-            email: session.user.email,
-            name: session.user.user_metadata?.full_name,
-            avatarUrl: session.user.user_metadata?.avatar_url,
-          });
-          
-          const userProfile = await getProfile(session.user.id);
-          setProfile(userProfile);
+          try {
+            // Create or update profile
+            await upsertProfile({
+              id: session.user.id,
+              email: session.user.email,
+              name: session.user.user_metadata?.full_name,
+              avatarUrl: session.user.user_metadata?.avatar_url,
+            });
+            
+            const userProfile = await getProfile(session.user.id);
+            setProfile(userProfile);
+          } catch (profileError) {
+            console.error('AuthProvider: Error updating profile:', profileError);
+            // Don't fail the entire auth process if profile fails
+            setProfile(null);
+          }
         } else {
           setProfile(null);
         }

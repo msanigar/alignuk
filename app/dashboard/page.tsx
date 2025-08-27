@@ -17,6 +17,7 @@ export default function DashboardPage() {
     const loadQuizHistory = async () => {
       if (user) {
         try {
+          console.log('Dashboard: Loading quiz history...');
           const history = await getQuizHistory();
           setQuizHistory(history);
         } catch (error) {
@@ -24,10 +25,21 @@ export default function DashboardPage() {
         } finally {
           setLoading(false);
         }
+      } else {
+        // If no user, set loading to false immediately
+        setLoading(false);
       }
     };
 
+    // Add a timeout to prevent infinite loading
+    const timeoutId = setTimeout(() => {
+      console.log('Dashboard: Timeout reached, setting loading to false');
+      setLoading(false);
+    }, 10000); // 10 second timeout
+
     loadQuizHistory();
+
+    return () => clearTimeout(timeoutId);
   }, [user]);
 
   if (!user) {
