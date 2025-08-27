@@ -1,0 +1,32 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <circle cx="16" cy="16" r="15" fill="#0284c7" stroke="#0369a1" stroke-width="2"/>
+  
+  <!-- Central dot representing the user's position -->
+  <circle cx="16" cy="16" r="3" fill="#ffffff"/>
+  
+  <!-- Six axes radiating from center (representing the 6 political dimensions) -->
+  <!-- Economic axis (horizontal) -->
+  <line x1="6" y1="16" x2="26" y2="16" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+  
+  <!-- Social axis (vertical) -->
+  <line x1="16" y1="6" x2="16" y2="26" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+  
+  <!-- Authority axis (diagonal top-left to bottom-right) -->
+  <line x1="8" y1="8" x2="24" y2="24" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" opacity="0.8"/>
+  
+  <!-- Sovereignty axis (diagonal top-right to bottom-left) -->
+  <line x1="24" y1="8" x2="8" y2="24" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" opacity="0.8"/>
+  
+  <!-- Environment axis (shorter horizontal) -->
+  <line x1="10" y1="12" x2="22" y2="12" stroke="#ffffff" stroke-width="1" stroke-linecap="round" opacity="0.6"/>
+  
+  <!-- Welfare axis (shorter vertical) -->
+  <line x1="12" y1="10" x2="12" y2="22" stroke="#ffffff" stroke-width="1" stroke-linecap="round" opacity="0.6"/>
+  
+  <!-- Small accent dots at the ends of main axes -->
+  <circle cx="6" cy="16" r="1.5" fill="#ffffff"/>
+  <circle cx="26" cy="16" r="1.5" fill="#ffffff"/>
+  <circle cx="16" cy="6" r="1.5" fill="#ffffff"/>
+  <circle cx="16" cy="26" r="1.5" fill="#ffffff"/>
+</svg>

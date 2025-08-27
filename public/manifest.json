@@ -1,0 +1,21 @@
+{
+  "name": "AlignUK - UK Political Alignment Quiz",
+  "short_name": "AlignUK",
+  "description": "Discover your political alignment across six key dimensions in UK politics",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#1e40af",
+  "icons": [
+    {
+      "src": "/logo.svg",
+      "sizes": "32x32",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "/logo-large.svg",
+      "sizes": "40x40",
+      "type": "image/svg+xml"
+    }
+  ]
+}
