@@ -50,7 +50,25 @@ export default function PartyMatchBarsChart({ data }: { data: MatchDatum[] }) {
             type="category"
             dataKey="name"
             width={120}
-            tick={{ fontSize: 12 }}
+            tick={(props) => {
+              const { x, y, payload } = props;
+              const isTopParty = payload.value === sorted[0]?.name;
+              return (
+                <g transform={`translate(${x},${y})`}>
+                  <text
+                    x={0}
+                    y={0}
+                    dy={4}
+                    textAnchor="end"
+                    fill={isTopParty ? '#1f2937' : '#6b7280'}
+                    fontSize={isTopParty ? 13 : 12}
+                    fontWeight={isTopParty ? '600' : '400'}
+                  >
+                    {payload.value}
+                  </text>
+                </g>
+              );
+            }}
           />
           <Tooltip
             formatter={(value: number) => [`${value}%`, 'Match']}
@@ -60,12 +78,17 @@ export default function PartyMatchBarsChart({ data }: { data: MatchDatum[] }) {
             dataKey="percent" 
             radius={[4, 4, 4, 4]}
           >
-            {sorted.map((entry, index) => (
-              <Cell 
-                key={`cell-${index}`} 
-                fill={PARTY_COLORS[entry.name] || '#6B7280'} 
-              />
-            ))}
+            {sorted.map((entry, index) => {
+              const isTopParty = index === 0;
+              const baseColor = PARTY_COLORS[entry.name] || '#6B7280';
+              return (
+                <Cell 
+                  key={`cell-${index}`} 
+                  fill={baseColor}
+                  opacity={isTopParty ? 1 : 0.85}
+                />
+              );
+            })}
             <LabelList
               dataKey="percent"
               position="right"

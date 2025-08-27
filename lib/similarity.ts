@@ -1,22 +1,36 @@
 /**
- * Similarity + ranking utilities for AlignUK party matching.
- * - Cosine similarity (default) in 6D axis space
- * - Optional Euclidean distance
- * - Softmax to convert similarities to a percentage distribution that sums to 100
+ * Similarity + ranking utilities for AlignUK party matching (v2).
+ * - Weighted cosine similarity + softmax (default lower temperature)
+ * - Alternative inverse-distance strategy for sharper separation
+ * - Axis weighting support (global defaults or per-user)
+ * - Diagnostics to detect clustered similarities
  */
 
-import type { Vector6, PartyVector } from './partyVectors';
+import type { Vector6, PartyVector, AxisKey } from './partyVectors';
+
+export type Strategy = 'cosineSoftmax' | 'inverseDistance';
 
 export type PartyMatch = {
   partyId: string;
   partyName: string;
-  cosine: number;      // -1 .. +1
-  euclidean: number;   // distance
-  weight: number;      // 0..1 softmax weight
+  cosine: number;      // -1 .. +1 (weighted)
+  euclidean: number;   // weighted Euclidean distance
+  weight: number;      // 0..1 softmax or normalized inverse-distance weight
   percent: number;     // 0..100 (rounded)
 };
 
-export const axisKeys: (keyof Vector6)[] = [
+export type RankOptions = {
+  /** Strategy to convert closeness to percents */
+  method?: Strategy;               // default: 'inverseDistance'
+  /** Softmax temperature for cosineSoftmax; lower = peakier */
+  temperature?: number;            // default: 0.3
+  /** Per-axis weights, e.g. give sovereignty/authority more influence */
+  axisWeights?: Partial<Record<AxisKey, number>>;
+  /** Minimum separation alert: if top and median within this diff, flag */
+  clusterEpsilon?: number;         // default: 0.04 (cosine space)
+};
+
+export const axisKeys: AxisKey[] = [
   'economic',
   'social',
   'authority',
@@ -25,33 +39,41 @@ export const axisKeys: (keyof Vector6)[] = [
   'welfare',
 ];
 
-function dot(a: Vector6, b: Vector6): number {
-  return axisKeys.reduce((sum, k) => sum + a[k] * b[k], 0);
+function mergedAxisWeights(overrides?: RankOptions['axisWeights']): Record<AxisKey, number> {
+  // Reasonable, conservative defaults; tweak as needed
+  const base: Record<AxisKey, number> = {
+    economic: 1.0,
+    social: 1.0,
+    authority: 1.15,
+    sovereignty: 1.20,
+    environment: 1.0,
+    welfare: 1.0,
+  };
+  return { ...base, ...(overrides || {}) } as Record<AxisKey, number>;
 }
 
-function norm(a: Vector6): number {
-  return Math.sqrt(axisKeys.reduce((sum, k) => sum + a[k] * a[k], 0));
+function dotWeighted(a: Vector6, b: Vector6, w: Record<AxisKey, number>): number {
+  return axisKeys.reduce((sum, k) => sum + w[k] * a[k] * b[k], 0);
 }
 
-export function cosineSimilarity(a: Vector6, b: Vector6): number {
-  const d = dot(a, b);
-  const na = norm(a);
-  const nb = norm(b);
+function normWeighted(a: Vector6, w: Record<AxisKey, number>): number {
+  return Math.sqrt(axisKeys.reduce((sum, k) => sum + w[k] * a[k] * a[k], 0));
+}
+
+export function cosineSimilarityWeighted(a: Vector6, b: Vector6, w: Record<AxisKey, number>): number {
+  const d = dotWeighted(a, b, w);
+  const na = normWeighted(a, w);
+  const nb = normWeighted(b, w);
   if (na === 0 || nb === 0) return 0;
   return d / (na * nb);
 }
 
-export function euclideanDistance(a: Vector6, b: Vector6): number {
-  const s = axisKeys.reduce((sum, k) => sum + Math.pow(a[k] - b[k], 2), 0);
+export function euclideanDistanceWeighted(a: Vector6, b: Vector6, w: Record<AxisKey, number>): number {
+  const s = axisKeys.reduce((sum, k) => sum + w[k] * Math.pow(a[k] - b[k], 2), 0);
   return Math.sqrt(s);
 }
 
-/**
- * Convert raw similarities to a normalized probability-like distribution via softmax.
- * Temperature controls spread: lower = peakier, higher = flatter.
- * We map cosine [-1..+1] to logits directly; you can also rescale if desired.
- */
-export function softmaxWeights(values: number[], temperature = 0.7): number[] {
+function softmax(values: number[], temperature = 0.3): number[] {
   const t = Math.max(0.01, temperature);
   const logits = values.map((v) => v / t);
   const maxLogit = Math.max(...logits);
@@ -60,40 +82,74 @@ export function softmaxWeights(values: number[], temperature = 0.7): number[] {
   return exps.map((x) => (sum === 0 ? 0 : x / sum));
 }
 
-/**
- * Rank parties for a given user vector. Returns sorted matches with percentages summing to 100.
- */
+function normalizeToPercents(weights: number[]): number[] {
+  const sum = weights.reduce((s, x) => s + x, 0);
+  const raw = sum > 0 ? weights.map((x) => x / sum) : weights.map(() => 0);
+  const rounded = raw.map((p) => Math.round(p * 100));
+  // fix rounding drift
+  const diff = 100 - rounded.reduce((s, x) => s + x, 0);
+  if (diff !== 0) {
+    const idx = rounded.indexOf(Math.max(...rounded));
+    rounded[idx] += diff;
+  }
+  return rounded;
+}
+
+function normalize(vals: number[]): number[] {
+  const s = vals.reduce((a, b) => a + b, 0);
+  return s > 0 ? vals.map((v) => v / s) : vals.map(() => 0);
+}
+
 export function rankParties(
   user: Vector6,
   parties: PartyVector[],
-  opts?: { temperature?: number }
+  opts?: RankOptions
 ): PartyMatch[] {
-  const cosines = parties.map((p) => cosineSimilarity(user, p.scores));
-  const weights = softmaxWeights(cosines, opts?.temperature ?? 0.7);
+  const method: Strategy = opts?.method ?? 'inverseDistance';
+  const temp = opts?.temperature ?? 0.3;
+  const w = mergedAxisWeights(opts?.axisWeights);
 
-  const matches: PartyMatch[] = parties.map((p, i) => {
-    const euc = euclideanDistance(user, p.scores);
-    const pct = Math.round(weights[i] * 100);
-    return {
-      partyId: p.id,
-      partyName: p.name,
-      cosine: cosines[i],
-      euclidean: euc,
-      weight: weights[i],
-      percent: pct,
-    };
-  });
+  const cosines = parties.map((p) => cosineSimilarityWeighted(user, p.scores, w));
+  const dists = parties.map((p) => euclideanDistanceWeighted(user, p.scores, w));
 
-  // Normalize rounding to sum exactly 100 (fix any off-by-1 from rounding)
-  const total = matches.reduce((s, m) => s + m.percent, 0);
-  if (total !== 100) {
-    // adjust the largest item to make sum = 100
-    const idx = matches.reduce(
-      (best, m, i, arr) => (m.percent > arr[best].percent ? i : best),
-      0
-    );
-    matches[idx].percent += 100 - total;
+  let weights: number[] = [];
+
+  if (method === 'cosineSoftmax') {
+    weights = softmax(cosines, temp);
+  } else {
+    // inverse-distance weighting with stability
+    const eps = 1e-6;
+    const inv = dists.map((d) => 1 / Math.max(eps, d));
+    weights = normalize(inv);
   }
 
-  return matches.sort((a, b) => b.weight - a.weight);
+  const percents = normalizeToPercents(weights);
+
+  const matches: PartyMatch[] = parties.map((p, i) => ({
+    partyId: p.id,
+    partyName: p.name,
+    cosine: cosines[i],
+    euclidean: dists[i],
+    weight: weights[i],
+    percent: percents[i],
+  })).sort((a, b) => b.weight - a.weight);
+
+  return matches;
+}
+
+/**
+ * Quick diagnostic: detects clustered cosines that can lead to "flat" bars.
+ * Returns true if median and top cosine within epsilon.
+ */
+export function isClustered(
+  user: Vector6,
+  parties: PartyVector[],
+  axisWeights?: RankOptions['axisWeights'],
+  epsilon = 0.04
+): boolean {
+  const w = mergedAxisWeights(axisWeights);
+  const cos = parties.map((p) => cosineSimilarityWeighted(user, p.scores, w)).sort((a, b) => b - a);
+  const top = cos[0];
+  const mid = cos[Math.floor(cos.length / 2)];
+  return top - mid < epsilon;
 }

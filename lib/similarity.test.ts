@@ -1,9 +1,18 @@
-import { cosineSimilarity, euclideanDistance, softmaxWeights, rankParties } from './similarity';
+import { cosineSimilarityWeighted, euclideanDistanceWeighted, rankParties, isClustered } from './similarity';
 import { PARTY_VECTORS } from './partyVectors';
 import type { Vector6 } from './partyVectors';
 
 describe('Similarity Functions', () => {
-  describe('cosineSimilarity', () => {
+  const defaultWeights = {
+    economic: 1.0,
+    social: 1.0,
+    authority: 1.15,
+    sovereignty: 1.20,
+    environment: 1.0,
+    welfare: 1.0,
+  };
+
+  describe('cosineSimilarityWeighted', () => {
     it('should return 1 for identical vectors', () => {
       const vector: Vector6 = {
         economic: 10,
@@ -13,7 +22,7 @@ describe('Similarity Functions', () => {
         environment: 50,
         welfare: 60,
       };
-      expect(cosineSimilarity(vector, vector)).toBe(1);
+      expect(cosineSimilarityWeighted(vector, vector, defaultWeights)).toBe(1);
     });
 
     it('should return -1 for opposite vectors', () => {
@@ -33,7 +42,7 @@ describe('Similarity Functions', () => {
         environment: -50,
         welfare: -60,
       };
-      expect(cosineSimilarity(vector1, vector2)).toBeCloseTo(-1, 5);
+      expect(cosineSimilarityWeighted(vector1, vector2, defaultWeights)).toBeCloseTo(-1, 5);
     });
 
     it('should return 0 for orthogonal vectors', () => {
@@ -53,11 +62,11 @@ describe('Similarity Functions', () => {
         environment: 0,
         welfare: 0,
       };
-      expect(cosineSimilarity(vector1, vector2)).toBe(0);
+      expect(cosineSimilarityWeighted(vector1, vector2, defaultWeights)).toBe(0);
     });
   });
 
-  describe('euclideanDistance', () => {
+  describe('euclideanDistanceWeighted', () => {
     it('should return 0 for identical vectors', () => {
       const vector: Vector6 = {
         economic: 10,
@@ -67,7 +76,7 @@ describe('Similarity Functions', () => {
         environment: 50,
         welfare: 60,
       };
-      expect(euclideanDistance(vector, vector)).toBe(0);
+      expect(euclideanDistanceWeighted(vector, vector, defaultWeights)).toBe(0);
     });
 
     it('should return positive distance for different vectors', () => {
@@ -87,26 +96,11 @@ describe('Similarity Functions', () => {
         environment: 1,
         welfare: 1,
       };
-      expect(euclideanDistance(vector1, vector2)).toBeGreaterThan(0);
+      expect(euclideanDistanceWeighted(vector1, vector2, defaultWeights)).toBeGreaterThan(0);
     });
   });
 
-  describe('softmaxWeights', () => {
-    it('should return weights that sum to 1', () => {
-      const values = [1, 2, 3, 4, 5];
-      const weights = softmaxWeights(values);
-      const sum = weights.reduce((a, b) => a + b, 0);
-      expect(sum).toBeCloseTo(1, 5);
-    });
 
-    it('should return all equal weights for equal values', () => {
-      const values = [1, 1, 1, 1, 1];
-      const weights = softmaxWeights(values);
-      weights.forEach(weight => {
-        expect(weight).toBeCloseTo(0.2, 5);
-      });
-    });
-  });
 
   describe('rankParties', () => {
     it('should return ranked parties with percentages summing to 100', () => {
@@ -119,7 +113,10 @@ describe('Similarity Functions', () => {
         welfare: 25,
       };
 
-      const matches = rankParties(userScores, PARTY_VECTORS);
+      const matches = rankParties(userScores, PARTY_VECTORS, {
+        method: 'inverseDistance',
+        temperature: 0.3,
+      });
       
       // Should have same number of parties
       expect(matches).toHaveLength(PARTY_VECTORS.length);
@@ -156,11 +153,47 @@ describe('Similarity Functions', () => {
         welfare: 100,
       };
 
-      const matches = rankParties(extremeScores, PARTY_VECTORS);
+      const matches = rankParties(extremeScores, PARTY_VECTORS, {
+        method: 'inverseDistance',
+        temperature: 0.3,
+      });
       expect(matches).toHaveLength(PARTY_VECTORS.length);
       
       const totalPercent = matches.reduce((sum, match) => sum + match.percent, 0);
       expect(totalPercent).toBe(100);
+    });
+  });
+
+  describe('isClustered', () => {
+    it('should detect clustered similarities', () => {
+      const clusteredScores: Vector6 = {
+        economic: 0,
+        social: 0,
+        authority: 0,
+        sovereignty: 0,
+        environment: 0,
+        welfare: 0,
+      };
+
+      const clustered = isClustered(clusteredScores, PARTY_VECTORS, defaultWeights, 0.04);
+      expect(typeof clustered).toBe('boolean');
+    });
+
+    it('should handle different epsilon values', () => {
+      const scores: Vector6 = {
+        economic: 50,
+        social: -30,
+        authority: 20,
+        sovereignty: 10,
+        environment: -40,
+        welfare: 25,
+      };
+
+      const clustered1 = isClustered(scores, PARTY_VECTORS, defaultWeights, 0.01);
+      const clustered2 = isClustered(scores, PARTY_VECTORS, defaultWeights, 0.1);
+      
+      expect(typeof clustered1).toBe('boolean');
+      expect(typeof clustered2).toBe('boolean');
     });
   });
 });

@@ -221,7 +221,14 @@ export function QuizResults() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.6 }}
           >
-            <PartyMatches userScores={convertScoresToVector6(results.scores)} />
+            <PartyMatches 
+              userScores={convertScoresToVector6(results.scores)} 
+              answers={results.answers.reduce((acc, answer) => {
+                // Convert Likert 1-7 to -3 to +3 scale
+                acc[answer.questionId] = answer.value - 4;
+                return acc;
+              }, {} as Record<string, number>)}
+            />
           </motion.div>
         </div>
 
