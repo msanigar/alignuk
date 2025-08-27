@@ -18,15 +18,28 @@ interface QuizQuestionsProps {
   onQuickTest?: () => void;
 }
 
-const likertLabels = [
-  'Strongly Disagree',
-  'Disagree',
-  'Somewhat Disagree',
-  'Neither Agree nor Disagree',
-  'Somewhat Agree',
-  'Agree',
-  'Strongly Agree'
-];
+  const likertLabels = [
+    'Strongly Disagree',
+    'Disagree',
+    'Somewhat Disagree',
+    'Neither Agree nor Disagree',
+    'Somewhat Agree',
+    'Agree',
+    'Strongly Agree'
+  ];
+
+  const getMobileLabel = (label: string) => {
+    const mobileLabels: Record<string, string> = {
+      'Strongly Disagree': 'S.Dis',
+      'Disagree': 'Dis',
+      'Somewhat Disagree': 'S.Dis',
+      'Neither Agree nor Disagree': 'Neutral',
+      'Somewhat Agree': 'S.Agr',
+      'Agree': 'Agr',
+      'Strongly Agree': 'S.Agr'
+    };
+    return mobileLabels[label] || label;
+  };
 
 export function QuizQuestions({
   currentQuestion,
@@ -115,8 +128,8 @@ export function QuizQuestions({
           {/* Likert Scale */}
           <div className="space-y-3">
             <div className="flex justify-between text-sm text-neutral-600 mb-4 px-1">
-              <span className="text-xs sm:text-sm">Strongly Disagree</span>
-              <span className="text-xs sm:text-sm">Strongly Agree</span>
+              <span className="text-xs sm:text-sm">S. Disagree</span>
+              <span className="text-xs sm:text-sm">S. Agree</span>
             </div>
             
             <div className="likert-scale">
@@ -136,7 +149,7 @@ export function QuizQuestions({
                     {likertLabels[value - 1]}
                   </div>
                   <div className="text-xs text-neutral-500 leading-tight sm:hidden">
-                    {likertLabels[value - 1].split(' ')[0]}
+                    {getMobileLabel(likertLabels[value - 1])}
                   </div>
                 </button>
               ))}
