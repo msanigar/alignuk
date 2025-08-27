@@ -1,9 +1,12 @@
 [build]
-  command = "npm run build"
-  publish = ".next"
+  command = "npm run build:netlify"
 
 [build.environment]
   NODE_VERSION = "20"
+
+# Use Next.js adapter for proper App Router support
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
 
 # Development settings
 [dev]
