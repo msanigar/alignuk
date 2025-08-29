@@ -106,6 +106,12 @@ export default function QuizPage() {
     }
   };
 
+  const handleGoBack = () => {
+    if (currentQuestionIndex > 0) {
+      setCurrentQuestionIndex(currentQuestionIndex - 1);
+    }
+  };
+
   const handleQuickTest = () => {
     console.log('🚀 Quick test initiated - generating random answers...');
     
@@ -232,6 +238,8 @@ export default function QuizPage() {
           questionNumber={currentQuestionIndex + 1}
           totalQuestions={getCurrentQuestions().length}
           onAnswer={handleAnswerQuestion}
+          onGoBack={handleGoBack}
+          canGoBack={currentQuestionIndex > 0}
           currentAnswer={answers.find(a => a.questionId === getCurrentQuestions()[currentQuestionIndex]?.id)?.value}
           loading={loading}
           onQuickTest={handleQuickTest}

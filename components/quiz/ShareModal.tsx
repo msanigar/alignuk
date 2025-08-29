@@ -5,7 +5,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Copy, Check, Twitter, Facebook, Linkedin } from 'lucide-react';
 
 interface ShareModalProps {
-  results: any;
+  results: {
+    tags: string[];
+  };
   onClose: () => void;
 }
 

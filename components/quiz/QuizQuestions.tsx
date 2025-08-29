@@ -1,18 +1,19 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Question } from '@/lib/types';
 import { ProgressBar } from './ProgressBar';
 import { QuestionTooltip } from './QuestionTooltip';
 import { SourcesModal } from './SourcesModal';
-import { getGlossaryTerm } from '@/lib/glossary';
 
 interface QuizQuestionsProps {
   currentQuestion: Question;
   questionNumber: number;
   totalQuestions: number;
   onAnswer: (questionId: string, value: number) => void;
+  onGoBack: () => void;
+  canGoBack: boolean;
   currentAnswer?: number;
   loading?: boolean;
   onQuickTest?: () => void;
@@ -35,6 +36,8 @@ export function QuizQuestions({
   questionNumber,
   totalQuestions,
   onAnswer,
+  onGoBack,
+  canGoBack,
   currentAnswer,
   loading = false,
   onQuickTest,
@@ -86,9 +89,23 @@ export function QuizQuestions({
           {/* Question Header */}
           <div className="mb-6">
             <div className="flex items-center justify-between mb-4">
-              <span className="text-sm font-medium text-neutral-500">
-                Question {questionNumber} of {totalQuestions}
-              </span>
+              <div className="flex items-center space-x-4">
+                {canGoBack && (
+                  <button
+                    onClick={onGoBack}
+                    disabled={loading}
+                    className="flex items-center space-x-2 text-neutral-600 hover:text-neutral-800 transition-colors disabled:opacity-50"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                    </svg>
+                    <span className="text-sm font-medium">Back</span>
+                  </button>
+                )}
+                <span className="text-sm font-medium text-neutral-500">
+                  Question {questionNumber} of {totalQuestions}
+                </span>
+              </div>
               <QuestionTooltip rationale={currentQuestion.rationale} />
             </div>
             

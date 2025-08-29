@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Mail, MessageSquare, Phone, MapPin, Clock, Shield, HelpCircle, FileText } from 'lucide-react';
+import { Mail, MessageSquare, Clock, Shield, HelpCircle, FileText } from 'lucide-react';
 
 export default function ContactPage() {
   return (

@@ -2,15 +2,14 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Share2, Download, BarChart3, Tag, TrendingUp } from 'lucide-react';
-import { AxisScore } from '@/lib/types';
+import { BarChart3, TrendingUp, Tag, Share2, Download } from 'lucide-react';
+import { AxisScore, Answer } from '@/lib/types';
 import { AXES } from '@/lib/axes';
 import { ResultsChart } from './ResultsChart';
 import { CompassChart } from './CompassChart';
 import { AxisDetail } from './AxisDetail';
 import { ShareModal } from './ShareModal';
 import { useAuth } from '@/components/providers/AuthProvider';
-import { getAxisLabel } from '@/lib/scoring';
 import { PartyMatches } from '@/components/PartyMatches';
 import { Vector6 } from '@/lib/partyVectors';
 
@@ -19,7 +18,7 @@ interface QuizResultsData {
   tags: string[];
   summary: Record<string, string>;
   overallSummary?: string;
-  answers: any[];
+  answers: Answer[];
   durationMs: number;
 }
 
@@ -28,6 +27,7 @@ export function QuizResults() {
   const [results, setResults] = useState<QuizResultsData | null>(null);
   const [showShareModal, setShowShareModal] = useState(false);
   const [selectedAxis, setSelectedAxis] = useState<string | null>(null);
+
 
   useEffect(() => {
     const savedResults = sessionStorage.getItem('quiz-results');

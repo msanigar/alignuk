@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Cookie, Shield, Settings, Eye, Database } from 'lucide-react';
+import { Cookie, Shield, Settings } from 'lucide-react';
 
 export default function CookiesPage() {
   return (

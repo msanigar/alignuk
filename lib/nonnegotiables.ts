@@ -13,7 +13,6 @@
  */
 
 import type { PartyMatch } from './similarity';
-import type { AxisKey } from './partyVectors';
 
 // ------------- Policy keys you care about (expand freely) -------------
 export type PolicyKey =

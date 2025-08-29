@@ -7,7 +7,7 @@ import { LogIn } from 'lucide-react';
 import { Logo } from '../Logo';
 
 export function HeroSection() {
-  const { user, signIn, signOut } = useAuth();
+  const { user, signIn } = useAuth();
 
   const handleSignIn = async () => {
     try {

@@ -3,25 +3,23 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { Share2, Download, BarChart3, Tag, TrendingUp, ExternalLink } from 'lucide-react';
-import { AxisScore } from '@/lib/types';
-import { AXES } from '@/lib/axes';
+import { BarChart3, TrendingUp } from 'lucide-react';
+import { AxisScore, Answer } from '@/lib/types';
 import { ResultsChart } from '@/components/quiz/ResultsChart';
 import { CompassChart } from '@/components/quiz/CompassChart';
-import { AxisDetail } from '@/components/quiz/AxisDetail';
 import { ShareModal } from '@/components/quiz/ShareModal';
 import { useAuth } from '@/components/providers/AuthProvider';
-import { getAxisLabel } from '@/lib/scoring';
 import { PartyMatches } from '@/components/PartyMatches';
 import { Vector6 } from '@/lib/partyVectors';
 import { getQuizResults } from '@/lib/database';
+import { getAxisLabel } from '@/lib/scoring';
 
 interface QuizResultsData {
   scores: AxisScore[];
   tags: string[];
   summary: Record<string, string>;
   overallSummary?: string;
-  answers: any[];
+  answers: Answer[];
   durationMs: number;
 }
 
@@ -33,7 +31,7 @@ export default function QuizResultsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showShareModal, setShowShareModal] = useState(false);
-  const [selectedAxis, setSelectedAxis] = useState<string | null>(null);
+
 
   useEffect(() => {
     const fetchResults = async () => {
@@ -78,15 +76,7 @@ export default function QuizResultsPage() {
     fetchResults();
   }, [quizId]);
 
-  const handleShare = () => {
-    setShowShareModal(true);
-  };
 
-  const formatDuration = (ms: number) => {
-    const minutes = Math.floor(ms / 60000);
-    const seconds = Math.floor((ms % 60000) / 1000);
-    return `${minutes}m ${seconds}s`;
-  };
 
   const convertScoresToVector6 = (scores: AxisScore[]): Vector6 => {
     const vector: Vector6 = {

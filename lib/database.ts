@@ -1,6 +1,5 @@
 import { supabase } from './supabase';
-import { QuizSession, Answer, AxisScore } from './types';
-import { calculateScores } from './scoring';
+import { QuizSession, Answer, AxisScore, AxisId } from './types';
 
 /**
  * Creates an anonymous session for quiz taking
@@ -145,8 +144,8 @@ export async function getQuizHistory(): Promise<Array<{
   return quizzes.map(quiz => ({
     id: quiz.id,
     createdAt: new Date(quiz.created_at),
-    scores: quiz.scores.map((score: any) => ({
-      axis: score.axis,
+    scores: quiz.scores.map((score: { axis: string; score: number; confidence: number }) => ({
+      axis: score.axis as AxisId,
       score: score.score,
       confidence: score.confidence,
     })),
@@ -204,12 +203,12 @@ export async function getQuizResults(quizId: string): Promise<{
   });
 
   return {
-    scores: scores.map((score: any) => ({
-      axis: score.axis,
+    scores: scores.map((score: { axis: string; score: number; confidence: number }) => ({
+      axis: score.axis as AxisId,
       score: score.score,
       confidence: score.confidence,
     })),
-    answers: answers.map((answer: any) => ({
+    answers: answers.map((answer: { question_id: string; value: number }) => ({
       questionId: answer.question_id,
       value: answer.value,
     })),

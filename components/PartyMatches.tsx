@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { PARTY_VECTORS } from '@/lib/partyVectors';
-import { rankParties, isClustered, type PartyMatch } from '@/lib/similarity';
+import { rankParties, isClustered } from '@/lib/similarity';
 import { PartyMatchBars } from '@/components/PartyMatchBars';
 import { Vector6 } from '@/lib/partyVectors';
 import { buildNonNegotiables, applyNonNegotiables } from '@/lib/nonnegotiables';

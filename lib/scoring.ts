@@ -1,4 +1,4 @@
-import { Answer, AxisScore, Question, QuizSession } from './types';
+import { Answer, AxisScore, Question, QuizSession, AxisId } from './types';
 import { QUESTIONS_FULL } from './questions';
 import { AXIS_IDS } from './axes';
 
@@ -141,7 +141,7 @@ export function calculateScores(session: QuizSession): ScoringResult {
     const hasSufficientData = hasSufficientCoverage(answeredWeight, totalWeight, absoluteWeightSum, answeredAbsoluteWeight);
 
     scores.push({
-      axis: axisId as any,
+      axis: axisId as AxisId,
       score: Math.round(normalizedScore),
       confidence,
     });
