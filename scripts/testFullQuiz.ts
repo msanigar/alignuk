@@ -18,7 +18,8 @@ TEST_PERSONAS.forEach(persona => {
     answers: Object.entries(persona.answers).map(([questionId, value]) => ({
       questionId,
       value
-    }))
+    })),
+    createdAt: new Date()
   };
 
   try {

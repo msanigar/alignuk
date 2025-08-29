@@ -25,10 +25,10 @@ TEST_PERSONAS.forEach(persona => {
 
   // Create mock party matches
   const mockMatches = [
-    { partyId: 'labour', partyName: 'Labour', weight: 0.8, percent: 40 },
-    { partyId: 'conservative', partyName: 'Conservative', weight: 0.6, percent: 30 },
-    { partyId: 'libdem', partyName: 'Liberal Democrats', weight: 0.4, percent: 20 },
-    { partyId: 'greens', partyName: 'Green Party', weight: 0.2, percent: 10 },
+    { partyId: 'labour', partyName: 'Labour', weight: 0.8, percent: 40, cosine: 0.8, euclidean: 0.2 },
+    { partyId: 'conservative', partyName: 'Conservative', weight: 0.6, percent: 30, cosine: 0.6, euclidean: 0.4 },
+    { partyId: 'libdem', partyName: 'Liberal Democrats', weight: 0.4, percent: 20, cosine: 0.4, euclidean: 0.6 },
+    { partyId: 'greens', partyName: 'Green Party', weight: 0.2, percent: 10, cosine: 0.2, euclidean: 0.8 },
   ];
 
   // Apply non-negotiables

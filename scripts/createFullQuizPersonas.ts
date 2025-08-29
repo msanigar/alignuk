@@ -278,7 +278,8 @@ export function runPersonaTest(persona: TestPersona): TestResult {
     answers: Object.entries(persona.answers).map(([questionId, value]) => ({
       questionId,
       value
-    }))
+    })),
+    createdAt: new Date()
   };
 
   // Import scoring functions

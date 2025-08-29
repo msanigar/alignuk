@@ -63,7 +63,7 @@ async function checkDuplicateScores() {
       
       // Check for duplicate axes
       const axes = quizScores.map(s => s.axis);
-      const uniqueAxes = [...new Set(axes)];
+      const uniqueAxes = Array.from(new Set(axes));
       
       if (axes.length !== uniqueAxes.length) {
         console.log(`  ❌ DUPLICATES FOUND!`);

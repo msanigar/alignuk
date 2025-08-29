@@ -18,7 +18,8 @@ const mockSession = {
   answers: Object.entries(persona.answers).map(([questionId, value]) => ({
     questionId,
     value
-  }))
+  })),
+  createdAt: new Date()
 };
 
 // Get economic questions

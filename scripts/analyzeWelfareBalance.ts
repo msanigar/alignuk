@@ -88,7 +88,7 @@ TEST_PERSONAS.forEach(persona => {
       questionId,
       value
     })),
-    createdAt: new Date().toISOString()
+    createdAt: new Date()
   };
   
   const scoringResult = calculateScores(mockSession);

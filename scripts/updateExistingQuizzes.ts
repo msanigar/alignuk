@@ -76,7 +76,7 @@ async function updateExistingQuizzes() {
           id: quiz.session_id || quiz.id,
           userId: quiz.profile_id,
           answers: formattedAnswers,
-          createdAt: quiz.created_at || new Date().toISOString()
+          createdAt: quiz.created_at ? new Date(quiz.created_at) : new Date()
         };
 
         // Calculate new scores using improved algorithm
