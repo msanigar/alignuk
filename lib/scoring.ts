@@ -1,5 +1,5 @@
 import { Answer, AxisScore, Question, QuizSession } from './types';
-import { QUESTIONS } from './questions';
+import { QUESTIONS_FULL } from './questions';
 import { AXIS_IDS } from './axes';
 
 // Constants for scoring
@@ -39,10 +39,11 @@ function calculateRawAxisScore(
   answers: Answer[],
   questions: Question[],
   importanceWeights?: Record<string, number>
-): { score: number; totalWeight: number; answeredWeight: number } {
+): { score: number; totalWeight: number; answeredWeight: number; absoluteWeightSum: number } {
   let totalScore = 0;
   let totalWeight = 0;
   let answeredWeight = 0;
+  let absoluteWeightSum = 0;
 
   // Get questions that target this axis
   const axisQuestions = questions.filter(q => 
@@ -60,15 +61,16 @@ function calculateRawAxisScore(
     const adjustedWeight = weight * importanceMultiplier;
     
     totalWeight += adjustedWeight;
+    absoluteWeightSum += Math.abs(adjustedWeight);
 
     if (answer !== undefined) {
-      const questionScore = mapLikertToScore(answer.value + 4); // Convert 1-7 to -3 to +3
+      const questionScore = mapLikertToScore(answer.value); // answer.value should already be 1-7
       totalScore += questionScore * adjustedWeight;
       answeredWeight += adjustedWeight;
     }
   }
 
-  return { score: totalScore, totalWeight, answeredWeight };
+  return { score: totalScore, totalWeight, answeredWeight, absoluteWeightSum };
 }
 
 /**
@@ -102,7 +104,7 @@ function hasSufficientCoverage(answeredWeight: number, totalWeight: number): boo
  */
 export function calculateScores(session: QuizSession): ScoringResult {
   const answers = session.answers;
-  const questions = QUESTIONS;
+  const questions = QUESTIONS_FULL;
   const importanceWeights = session.importanceWeights;
 
   const scores: AxisScore[] = [];
@@ -110,14 +112,16 @@ export function calculateScores(session: QuizSession): ScoringResult {
   let overallConfidence = 0;
 
   for (const axisId of AXIS_IDS) {
-    const { score: rawScore, totalWeight, answeredWeight } = calculateRawAxisScore(
+    const { score: rawScore, totalWeight, answeredWeight, absoluteWeightSum } = calculateRawAxisScore(
       axisId,
       answers,
       questions,
       importanceWeights
     );
 
-    const maxPossibleScore = totalWeight * 3; // Maximum possible score if all answers were +3
+    // Calculate maximum possible score for this axis
+    // Use absolute sum of weights to handle balanced positive/negative weights
+    const maxPossibleScore = absoluteWeightSum * 3; // Maximum score per question is 3
     const normalizedScore = normalizeScore(rawScore, maxPossibleScore);
     const confidence = calculateConfidence(answeredWeight, totalWeight);
     const hasSufficientData = hasSufficientCoverage(answeredWeight, totalWeight);

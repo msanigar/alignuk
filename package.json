@@ -9,12 +9,14 @@
     "start": "next start",
     "lint": "next lint",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "test:validation": "tsx scripts/runValidationTests.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.38.4",
     "@testing-library/jest-dom": "^6.8.0",
     "@testing-library/react": "^16.3.0",
+    "dotenv": "^17.2.1",
     "framer-motion": "^10.16.4",
     "lucide-react": "^0.541.0",
     "next": "14.2.32",
@@ -33,6 +35,7 @@
     "jest-environment-jsdom": "^30.0.5",
     "postcss": "^8.4.31",
     "tailwindcss": "^3.3.5",
+    "tsx": "^4.20.5",
     "typescript": "^5.2.2"
   }
 }

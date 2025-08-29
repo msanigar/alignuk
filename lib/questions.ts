@@ -5,7 +5,7 @@ export const QUESTIONS_LITE: Question[] = [
   // Economic Axis (6 questions)
   {
     id: 'econ_1',
-    text: 'The UK government should expand its role in managing the economy, even if this reduces business flexibility.',
+    text: 'The UK government should have a larger role in managing the economy, even if this reduces business flexibility.',
     axisTargets: [{ axis: 'economic', weight: 1.0 }],
     rationale: 'Tests preference for a larger state role (regulation/public ownership) versus market-led approaches.',
     stat: 'UK public sector expenditure was about 44% of GDP in 2022/23 (ONS).',
@@ -15,9 +15,9 @@ export const QUESTIONS_LITE: Question[] = [
   },
   {
     id: 'econ_2',
-    text: 'Contracting public services to private providers can improve value for money, even if profit is involved.',
+    text: 'Public services should be delivered by private companies rather than government departments.',
     axisTargets: [{ axis: 'economic', weight: 1.0 }],
-    rationale: 'Assesses openness to private provision in public services versus public-only delivery.',
+    rationale: 'Tests preference for private sector delivery versus public sector provision of services.',
     stat: 'Independent sector accounts for a minority share of NHS-delivered care (NHS Confederation, 2023).',
     sources: [
       { label: 'NHS Confederation', url: 'https://www.nhsconfed.org/publications/independent-sector-nhs' }
@@ -35,9 +35,9 @@ export const QUESTIONS_LITE: Question[] = [
   },
   {
     id: 'econ_4',
-    text: 'Reducing tax rates generally encourages growth and investment, even if it means less revenue for public services.',
+    text: 'Lower taxes are more important than funding public services.',
     axisTargets: [{ axis: 'economic', weight: 1.0 }],
-    rationale: 'Tests preference for lower taxes versus funding capacity for public services.',
+    rationale: 'Tests preference for lower taxation versus higher public spending.',
     stat: 'Main rate of UK corporation tax is 25% (from April 2023).',
     sources: [
       { label: 'HMRC', url: 'https://www.gov.uk/corporation-tax-rates' }
@@ -45,22 +45,22 @@ export const QUESTIONS_LITE: Question[] = [
   },
   {
     id: 'econ_5',
-    text: 'Greater political oversight of the Bank of England would improve accountability, even if it risks more short-term decisions.',
+    text: 'The private sector should handle most services currently provided by government.',
     axisTargets: [{ axis: 'economic', weight: 1.0 }],
-    rationale: 'Independence vs. political control in monetary policy.',
-    stat: 'The Bank has been operationally independent since 1997.',
+    rationale: 'Tests preference for private sector provision versus government provision of services.',
+    stat: 'The UK has privatized many industries including telecoms, energy, and transport.',
     sources: [
-      { label: 'Bank of England', url: 'https://www.bankofengland.co.uk/about/people/independence' }
+      { label: 'UK Government', url: 'https://www.gov.uk/government/publications/privatisation' }
     ]
   },
   {
     id: 'econ_6',
-    text: 'Reducing business regulation would benefit consumers and growth, even if some protections are weakened.',
+    text: 'The government should provide universal basic services like healthcare and education.',
     axisTargets: [{ axis: 'economic', weight: 1.0 }],
-    rationale: 'Fewer rules may spur activity but reduce certain safeguards.',
-    stat: 'The UK operates numerous sector regulators and codes (BRE overview).',
+    rationale: 'Tests preference for universal public services versus private provision.',
+    stat: 'The NHS provides free healthcare to all UK residents.',
     sources: [
-      { label: 'Better Regulation Executive', url: 'https://www.gov.uk/government/organisations/better-regulation-executive' }
+      { label: 'NHS', url: 'https://www.nhs.uk/about-us/' }
     ]
   },
 
@@ -129,9 +129,9 @@ export const QUESTIONS_LITE: Question[] = [
   // Authority Axis (6 questions)
   {
     id: 'auth_1',
-    text: 'Individual freedoms should be prioritized over collective security measures.',
+    text: 'Collective security measures should be prioritized over individual freedoms.',
     axisTargets: [{ axis: 'authority', weight: 1.0 }],
-    rationale: 'This asks whether you prefer individual liberty (freedom to act as you choose) versus collective security (government measures to protect society). Currently the UK balances both with various security laws.',
+    rationale: 'This asks whether you prefer collective security (government measures to protect society) versus individual liberty (freedom to act as you choose). Currently the UK balances both with various security laws.',
     stat: 'The UK has extensive surveillance powers under the Investigatory Powers Act 2016.',
     sources: [
       { label: 'UK Parliament', url: 'https://www.legislation.gov.uk/ukpga/2016/25/contents' }
@@ -139,19 +139,19 @@ export const QUESTIONS_LITE: Question[] = [
   },
   {
     id: 'auth_2',
-    text: 'The government should have more power to monitor and regulate online content.',
+    text: 'The internet should remain largely unregulated, even if some harmful content exists.',
     axisTargets: [{ axis: 'authority', weight: 1.0 }],
-    rationale: 'This asks whether you prefer government regulation of online content (to prevent harm) versus keeping the internet largely unregulated. Currently the UK is introducing the Online Safety Bill.',
-    stat: 'The Online Safety Bill aims to regulate social media and search engines.',
+    rationale: 'This asks whether you prefer keeping the internet unregulated versus government regulation of online content. Currently the UK is introducing the Online Safety Bill.',
+    stat: 'The Online Safety Bill aims to regulate social media and search engines, but many oppose this regulation.',
     sources: [
       { label: 'UK Parliament', url: 'https://bills.parliament.uk/bills/3137' }
     ]
   },
   {
     id: 'auth_3',
-    text: 'Citizens should have the right to protest even if it disrupts public order.',
+    text: 'Public order should be maintained, even if it means limiting protest rights.',
     axisTargets: [{ axis: 'authority', weight: 1.0 }],
-    rationale: 'This asks whether you prefer the right to protest (even if disruptive) versus maintaining public order. Currently the UK allows peaceful protest but has laws against disruption.',
+    rationale: 'This asks whether you prefer maintaining public order versus the right to protest (even if disruptive). Currently the UK allows peaceful protest but has laws against disruption.',
     stat: 'The Police, Crime, Sentencing and Courts Act 2022 introduced new restrictions on protests.',
     sources: [
       { label: 'UK Parliament', url: 'https://www.legislation.gov.uk/ukpga/2022/32/contents' }
@@ -159,32 +159,32 @@ export const QUESTIONS_LITE: Question[] = [
   },
   {
     id: 'auth_4',
-    text: 'The police should have more powers to prevent crime, even if it means less privacy.',
+    text: 'Individual privacy should be protected, even if it limits police powers to prevent crime.',
     axisTargets: [{ axis: 'authority', weight: 1.0 }],
-    rationale: 'This asks whether you prefer giving police more powers (to prevent crime) versus protecting individual privacy. Currently the UK police have significant powers but with some privacy protections.',
-    stat: 'UK police have powers to stop and search, with 577,000 searches in 2021/22.',
+    rationale: 'This asks whether you prefer protecting individual privacy versus giving police more powers to prevent crime. Currently the UK police have significant powers but with some privacy protections.',
+    stat: 'UK police have powers to stop and search, with 577,000 searches in 2021/22, but privacy advocates oppose these powers.',
     sources: [
       { label: 'Home Office', url: 'https://www.gov.uk/government/statistics/police-powers-and-procedures-stop-and-search-and-arrests-england-and-wales-year-ending-31-march-2022' }
     ]
   },
   {
     id: 'auth_5',
-    text: 'Schools should have more authority to discipline students, even if it limits student rights.',
+    text: 'Society should regulate lifestyle choices to maintain social order.',
     axisTargets: [{ axis: 'authority', weight: 1.0 }],
-    rationale: 'This asks whether you prefer schools having more disciplinary powers versus protecting student rights. Currently UK schools have disciplinary powers but must respect student rights.',
-    stat: 'Schools can exclude students for serious misconduct, with 5,800 permanent exclusions in 2021/22.',
+    rationale: 'This asks whether you prefer social conformity and regulation versus individual lifestyle choices. Currently the UK protects many individual rights but has some social regulations.',
+    stat: 'The UK has strong protections for individual rights under the Human Rights Act 1998.',
     sources: [
-      { label: 'Department for Education', url: 'https://explore-education-statistics.service.gov.uk/find-statistics/permanent-and-fixed-period-exclusions-in-england' }
+      { label: 'UK Parliament', url: 'https://www.legislation.gov.uk/ukpga/1998/42/contents' }
     ]
   },
   {
     id: 'auth_6',
-    text: 'The government should have more control over the media to prevent misinformation.',
+    text: 'People should be free to express controversial opinions without government interference.',
     axisTargets: [{ axis: 'authority', weight: 1.0 }],
-    rationale: 'This asks whether you prefer government regulation of media (to prevent misinformation) versus media freedom. Currently the UK has some media regulation but strong press freedom.',
-    stat: 'Ofcom regulates UK broadcasting, but print media is self-regulated.',
+    rationale: 'This asks whether you prefer freedom of expression versus government regulation of speech. Currently the UK protects free speech but has some restrictions on hate speech.',
+    stat: 'The UK has strong free speech protections under Article 10 of the European Convention on Human Rights.',
     sources: [
-      { label: 'Ofcom', url: 'https://www.ofcom.org.uk/about-ofcom' }
+      { label: 'UK Parliament', url: 'https://www.legislation.gov.uk/ukpga/1998/42/schedule/1/part/I/chapter/9' }
     ]
   },
 
@@ -192,7 +192,7 @@ export const QUESTIONS_LITE: Question[] = [
   {
     id: 'sovereign_1',
     text: 'The UK should prioritize international cooperation over national sovereignty.',
-    axisTargets: [{ axis: 'sovereignty', weight: 1.0 }],
+    axisTargets: [{ axis: 'sovereignty', weight: -1.0 }],
     rationale: 'This asks whether you prefer international cooperation (working with other countries) versus national sovereignty (UK making its own decisions). Currently the UK balances both post-Brexit.',
     stat: 'The UK remains a member of NATO, UN, G7, and other international organizations.',
     sources: [
@@ -202,7 +202,7 @@ export const QUESTIONS_LITE: Question[] = [
   {
     id: 'sovereign_2',
     text: 'The UK should accept more international laws and regulations, even if it limits domestic control.',
-    axisTargets: [{ axis: 'sovereignty', weight: 1.0 }],
+    axisTargets: [{ axis: 'sovereignty', weight: -1.0 }],
     rationale: 'This asks whether you prefer accepting international laws (for global cooperation) versus maintaining UK control over laws. Currently the UK follows some international laws but has regained control over many areas post-Brexit.',
     stat: 'The UK remains bound by international treaties like the European Convention on Human Rights.',
     sources: [
@@ -242,7 +242,7 @@ export const QUESTIONS_LITE: Question[] = [
   {
     id: 'sovereign_6',
     text: 'The UK should be more involved in international organizations and agreements.',
-    axisTargets: [{ axis: 'sovereignty', weight: 1.0 }],
+    axisTargets: [{ axis: 'sovereignty', weight: -1.0 }],
     rationale: 'This asks whether you prefer the UK being more involved in international organizations versus being more independent. Currently the UK participates in many international organizations but has reduced EU involvement.',
     stat: 'The UK is a founding member of the UN, NATO, and Commonwealth.',
     sources: [
@@ -284,7 +284,7 @@ export const QUESTIONS_LITE: Question[] = [
   {
     id: 'env_4',
     text: 'The UK should prioritize energy security over environmental concerns.',
-    axisTargets: [{ axis: 'environment', weight: 1.0 }],
+    axisTargets: [{ axis: 'environment', weight: -1.0 }],
     rationale: 'This asks whether you prefer ensuring reliable energy supply versus environmental protection. Currently the UK balances both but energy security has become more important.',
     stat: 'The UK imports 40% of its energy needs.',
     sources: [
@@ -294,7 +294,7 @@ export const QUESTIONS_LITE: Question[] = [
   {
     id: 'env_5',
     text: 'The UK should expand fossil fuel production to reduce dependence on imports.',
-    axisTargets: [{ axis: 'environment', weight: 1.0 }],
+    axisTargets: [{ axis: 'environment', weight: -1.0 }],
     rationale: 'This asks whether you prefer expanding UK fossil fuel production (for energy security) versus reducing fossil fuel use (for climate). Currently the UK is reducing fossil fuel use but still produces some.',
     stat: 'The UK still produces oil and gas from the North Sea, though production is declining.',
     sources: [
@@ -687,7 +687,7 @@ export const QUESTIONS_FULL: Question[] = [
   {
     id: 'sovereign_1',
     text: 'The UK should prioritize international cooperation over national sovereignty.',
-    axisTargets: [{ axis: 'sovereignty', weight: 1.0 }],
+    axisTargets: [{ axis: 'sovereignty', weight: -1.0 }],
     rationale: 'This asks whether you prefer international cooperation (working with other countries) versus national sovereignty (UK making its own decisions). Currently the UK balances both post-Brexit.',
     stat: 'The UK remains a member of NATO, UN, G7, and other international organizations.',
     sources: [
@@ -697,7 +697,7 @@ export const QUESTIONS_FULL: Question[] = [
   {
     id: 'sovereign_2',
     text: 'The UK should accept more international laws and regulations, even if it limits domestic control.',
-    axisTargets: [{ axis: 'sovereignty', weight: 1.0 }],
+    axisTargets: [{ axis: 'sovereignty', weight: -1.0 }],
     rationale: 'This asks whether you prefer accepting international laws (for global cooperation) versus maintaining UK control over laws. Currently the UK follows some international laws but has regained control over many areas post-Brexit.',
     stat: 'The UK remains bound by international treaties like the European Convention on Human Rights.',
     sources: [
@@ -717,7 +717,7 @@ export const QUESTIONS_FULL: Question[] = [
   {
     id: 'sovereign_4',
     text: 'The UK should accept more international trade agreements, even if they limit domestic policy choices.',
-    axisTargets: [{ axis: 'sovereignty', weight: 1.0 }],
+    axisTargets: [{ axis: 'sovereignty', weight: -1.0 }],
     rationale: 'This asks whether you prefer international trade agreements (for economic benefits) versus maintaining UK control over trade policy. Currently the UK is negotiating new trade deals post-Brexit.',
     stat: 'The UK has signed trade agreements with 71 countries since leaving the EU.',
     sources: [
@@ -737,7 +737,7 @@ export const QUESTIONS_FULL: Question[] = [
   {
     id: 'sovereign_6',
     text: 'The UK should be more involved in international organizations and agreements.',
-    axisTargets: [{ axis: 'sovereignty', weight: 1.0 }],
+    axisTargets: [{ axis: 'sovereignty', weight: -1.0 }],
     rationale: 'This asks whether you prefer the UK being more involved in international organizations versus being more independent. Currently the UK participates in many international organizations but has reduced EU involvement.',
     stat: 'The UK is a founding member of the UN, NATO, and Commonwealth.',
     sources: [
@@ -747,7 +747,7 @@ export const QUESTIONS_FULL: Question[] = [
   {
     id: 'sovereign_7',
     text: 'The UK should seek closer economic and security cooperation with the EU, even if it means aligning with more EU rules.',
-    axisTargets: [{ axis: 'sovereignty', weight: 1.0 }],
+    axisTargets: [{ axis: 'sovereignty', weight: -1.0 }],
     rationale: 'Cooperation benefits vs. rule-alignment and autonomy costs.',
     stat: 'The UK left the EU in January 2020; cooperation continues via agreements.',
     sources: [
@@ -819,7 +819,7 @@ export const QUESTIONS_FULL: Question[] = [
   {
     id: 'env_4',
     text: 'The UK should prioritize energy security over environmental concerns.',
-    axisTargets: [{ axis: 'environment', weight: 1.0 }],
+    axisTargets: [{ axis: 'environment', weight: -1.0 }],
     rationale: 'This asks whether you prefer ensuring reliable energy supply versus environmental protection. Currently the UK balances both but energy security has become more important.',
     stat: 'The UK imports 40% of its energy needs.',
     sources: [
@@ -829,7 +829,7 @@ export const QUESTIONS_FULL: Question[] = [
   {
     id: 'env_5',
     text: 'The UK should expand fossil fuel production to reduce dependence on imports.',
-    axisTargets: [{ axis: 'environment', weight: 1.0 }],
+    axisTargets: [{ axis: 'environment', weight: -1.0 }],
     rationale: 'This asks whether you prefer expanding UK fossil fuel production (for energy security) versus reducing fossil fuel use (for climate). Currently the UK is reducing fossil fuel use but still produces some.',
     stat: 'The UK still produces oil and gas from the North Sea, though production is declining.',
     sources: [
@@ -859,7 +859,7 @@ export const QUESTIONS_FULL: Question[] = [
   {
     id: 'env_8',
     text: 'Policies that boost economic growth should proceed even if they delay emissions reductions.',
-    axisTargets: [{ axis: 'environment', weight: 1.0 }],
+    axisTargets: [{ axis: 'environment', weight: -1.0 }],
     rationale: 'Growth and jobs vs. pace of decarbonisation.',
     stat: 'UK GDP growth rates vary; latest annual data available from ONS.',
     sources: [
@@ -879,7 +879,7 @@ export const QUESTIONS_FULL: Question[] = [
   {
     id: 'env_10',
     text: 'Energy security should be prioritised over faster emissions cuts, even if total emissions fall more slowly.',
-    axisTargets: [{ axis: 'environment', weight: 1.0 }],
+    axisTargets: [{ axis: 'environment', weight: -1.0 }],
     rationale: 'Reliability/affordability vs. pace of decarbonisation.',
     stat: 'The UK imports a significant portion of its energy (DESNZ energy trends).',
     sources: [
@@ -961,7 +961,7 @@ export const QUESTIONS_FULL: Question[] = [
   {
     id: 'welfare_8',
     text: 'Most working-age benefits should be conditional on seeking work or training.',
-    axisTargets: [{ axis: 'welfare', weight: 1.0 }],
+    axisTargets: [{ axis: 'welfare', weight: -1.0 }],
     rationale: 'Conditionality to encourage work vs. unconditional support.',
     stat: 'Universal Credit includes work search requirements for many claimants.',
     sources: [
@@ -981,7 +981,7 @@ export const QUESTIONS_FULL: Question[] = [
   {
     id: 'welfare_10',
     text: 'Individuals should pay more of their own healthcare costs, even if this reduces universal coverage.',
-    axisTargets: [{ axis: 'welfare', weight: 1.0 }],
+    axisTargets: [{ axis: 'welfare', weight: -1.0 }],
     rationale: 'Private responsibility vs. universality.',
     stat: 'A minority of residents hold private health insurance in the UK.',
     sources: [
