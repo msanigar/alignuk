@@ -218,6 +218,74 @@ export async function getQuizResults(quizId: string): Promise<{
 }
 
 /**
+ * Deletes a quiz and all associated data (scores, answers)
+ */
+export async function deleteQuiz(quizId: string): Promise<boolean> {
+  console.log('deleteQuiz: Deleting quiz:', quizId);
+  
+  const { data: { user } } = await supabase.auth.getUser();
+  
+  if (!user) {
+    console.error('deleteQuiz: No authenticated user');
+    throw new Error('Authentication required');
+  }
+
+  // First, verify the quiz belongs to the current user
+  const { data: quiz, error: quizError } = await supabase
+    .from('quizzes')
+    .select('id, profile_id')
+    .eq('id', quizId)
+    .single();
+
+  if (quizError) {
+    console.error('Error fetching quiz for deletion:', quizError);
+    throw new Error('Quiz not found');
+  }
+
+  if (quiz.profile_id !== user.id) {
+    console.error('deleteQuiz: Quiz does not belong to user');
+    throw new Error('Unauthorized to delete this quiz');
+  }
+
+  // Delete in the correct order to respect foreign key constraints
+  // 1. Delete scores
+  const { error: scoresError } = await supabase
+    .from('scores')
+    .delete()
+    .eq('quiz_id', quizId);
+
+  if (scoresError) {
+    console.error('Error deleting scores:', scoresError);
+    throw new Error('Failed to delete quiz scores');
+  }
+
+  // 2. Delete answers
+  const { error: answersError } = await supabase
+    .from('answers')
+    .delete()
+    .eq('quiz_id', quizId);
+
+  if (answersError) {
+    console.error('Error deleting answers:', answersError);
+    throw new Error('Failed to delete quiz answers');
+  }
+
+  // 3. Delete the quiz record
+  const { error: quizDeleteError } = await supabase
+    .from('quizzes')
+    .delete()
+    .eq('id', quizId);
+
+  if (quizDeleteError) {
+    console.error('Error deleting quiz:', quizDeleteError);
+    throw new Error('Failed to delete quiz');
+  }
+
+  console.log('deleteQuiz: Successfully deleted quiz:', quizId);
+  return true;
+}
+
+/**
  * Creates or updates user profile
  */
 export async function upsertProfile(profile: {

@@ -7,11 +7,24 @@ import { QuizHistory } from '@/lib/types';
 import { motion } from 'framer-motion';
 import { Calendar, Clock, BarChart3, ExternalLink } from 'lucide-react';
 import Link from 'next/link';
+import { DeleteQuizButton } from '@/components/DeleteQuizButton';
 
 export default function DashboardPage() {
   const { user } = useAuth();
   const [quizHistory, setQuizHistory] = useState<QuizHistory[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const refreshQuizHistory = async () => {
+    if (user) {
+      try {
+        console.log('Dashboard: Refreshing quiz history...');
+        const history = await getQuizHistory();
+        setQuizHistory(history);
+      } catch (error) {
+        console.error('Failed to refresh quiz history:', error);
+      }
+    }
+  };
 
   useEffect(() => {
     const loadQuizHistory = async () => {
@@ -161,7 +174,7 @@ export default function DashboardPage() {
                     </p>
                   </div>
                   
-                  <div className="mt-4 md:mt-0 md:ml-6">
+                  <div className="mt-4 md:mt-0 md:ml-6 flex flex-col space-y-2">
                     <Link
                       href={`/quiz/results/${quiz.id}`}
                       className="flex items-center space-x-2 text-primary-600 hover:text-primary-700 transition-colors"
@@ -169,6 +182,11 @@ export default function DashboardPage() {
                       <span>View Results</span>
                       <ExternalLink className="w-4 h-4" />
                     </Link>
+                    <DeleteQuizButton
+                      quizId={quiz.id}
+                      quizTitle={`Quiz #${quiz.id.slice(-8)}`}
+                      onDelete={refreshQuizHistory}
+                    />
                   </div>
                 </div>
               </motion.div>

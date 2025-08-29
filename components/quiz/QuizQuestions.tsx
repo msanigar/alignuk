@@ -28,18 +28,7 @@ interface QuizQuestionsProps {
     'Strongly Agree'
   ];
 
-  const getMobileLabel = (label: string) => {
-    const mobileLabels: Record<string, string> = {
-      'Strongly Disagree': 'S.Dis',
-      'Disagree': 'Dis',
-      'Somewhat Disagree': 'S.Dis',
-      'Neither Agree nor Disagree': 'Neutral',
-      'Somewhat Agree': 'S.Agr',
-      'Agree': 'Agr',
-      'Strongly Agree': 'S.Agr'
-    };
-    return mobileLabels[label] || label;
-  };
+
 
 export function QuizQuestions({
   currentQuestion,
@@ -127,9 +116,9 @@ export function QuizQuestions({
 
           {/* Likert Scale */}
           <div className="space-y-3">
-            <div className="flex justify-between text-sm text-neutral-600 mb-4 px-1">
-              <span className="text-xs sm:text-sm">S. Disagree</span>
-              <span className="text-xs sm:text-sm">S. Agree</span>
+            <div className="hidden lg:flex justify-between text-sm text-neutral-600 mb-4 px-1">
+              <span className="text-xs sm:text-sm">Strongly Disagree</span>
+              <span className="text-xs sm:text-sm">Strongly Agree</span>
             </div>
             
             <div className="likert-scale">
@@ -145,11 +134,8 @@ export function QuizQuestions({
                   <div className="text-base md:text-lg font-semibold text-neutral-700 mb-1">
                     {value}
                   </div>
-                  <div className="text-xs text-neutral-500 leading-tight hidden sm:block">
+                  <div className="text-xs text-neutral-500 leading-tight">
                     {likertLabels[value - 1]}
-                  </div>
-                  <div className="text-xs text-neutral-500 leading-tight sm:hidden">
-                    {getMobileLabel(likertLabels[value - 1])}
                   </div>
                 </button>
               ))}
