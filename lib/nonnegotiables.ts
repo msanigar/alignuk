@@ -22,7 +22,11 @@ export type PolicyKey =
   | 'net_zero_priority'
   | 'nhs_free_point_of_use'
   | 'national_service'
-  | 'private_provision_public_services';
+  | 'private_provision_public_services'
+  | 'taxation_policy'
+  | 'crime_policing'
+  | 'housing_development'
+  | 'education_curriculum';
 
 // ------------- Map quiz questionIds → policy keys -------------
 // Add entries for any questions that strongly indicate a concrete policy preference.
@@ -47,6 +51,21 @@ export const QUESTION_POLICY_MAP: Record<string, PolicyKey> = {
 
   // Private provision in public services
   econ_2: 'private_provision_public_services',
+
+  // NEW: Taxation
+  econ_3: 'taxation_policy',               // minimum wage (proxy for redistributive stance)
+  econ_4: 'taxation_policy',               // lower taxes vs public services
+
+  // NEW: Crime & Policing
+  auth_3: 'crime_policing',                // public order vs protest rights
+  auth_4: 'crime_policing',                // privacy vs police powers
+
+  // NEW: Housing Development
+  sovereign_8: 'housing_development',      // national interests vs international cooperation (housing implications)
+
+  // NEW: Education Curriculum
+  social_4: 'education_curriculum',        // immigration benefits (cultural diversity in education)
+  social_5: 'education_curriculum',        // diverse family structures (inclusive education)
 };
 
 // ------------- Party stances on each policy key: -1 .. +1 -------------
@@ -60,6 +79,10 @@ export const PARTY_POLICY_STANCES: Record<string, Partial<Record<PolicyKey, numb
     nhs_free_point_of_use: +0.8,
     national_service: -0.4,
     private_provision_public_services: -0.2,
+    taxation_policy: +0.8,
+    crime_policing: -0.3,
+    housing_development: +0.6,
+    education_curriculum: +0.8,
   },
   conservative: {
     immigration_control: +0.6,
@@ -68,6 +91,10 @@ export const PARTY_POLICY_STANCES: Record<string, Partial<Record<PolicyKey, numb
     nhs_free_point_of_use: +0.5,
     national_service: +0.5,
     private_provision_public_services: +0.4,
+    taxation_policy: -0.2,
+    crime_policing: +0.6,
+    housing_development: +0.3,
+    education_curriculum: -0.2,
   },
   libdem: {
     immigration_control: -0.5,
@@ -76,6 +103,10 @@ export const PARTY_POLICY_STANCES: Record<string, Partial<Record<PolicyKey, numb
     nhs_free_point_of_use: +0.6,
     national_service: -0.6,
     private_provision_public_services: -0.1,
+    taxation_policy: +0.5,
+    crime_policing: -0.2,
+    housing_development: +0.5,
+    education_curriculum: +0.7,
   },
   greens: {
     immigration_control: -0.8,
@@ -84,6 +115,10 @@ export const PARTY_POLICY_STANCES: Record<string, Partial<Record<PolicyKey, numb
     nhs_free_point_of_use: +0.8,
     national_service: -0.8,
     private_provision_public_services: -0.8,
+    taxation_policy: +0.9,
+    crime_policing: -0.6,
+    housing_development: +0.4,
+    education_curriculum: +1.0,
   },
   reform: {
     immigration_control: +1.0,
@@ -92,6 +127,10 @@ export const PARTY_POLICY_STANCES: Record<string, Partial<Record<PolicyKey, numb
     nhs_free_point_of_use: -0.2,
     national_service: +0.7,
     private_provision_public_services: +0.6,
+    taxation_policy: -0.8,
+    crime_policing: +0.8,
+    housing_development: +0.7,
+    education_curriculum: -0.6,
   },
   snp: {
     immigration_control: -0.2,
@@ -100,6 +139,10 @@ export const PARTY_POLICY_STANCES: Record<string, Partial<Record<PolicyKey, numb
     nhs_free_point_of_use: +0.7,
     national_service: -0.3,
     private_provision_public_services: -0.3,
+    taxation_policy: +0.6,
+    crime_policing: -0.1,
+    housing_development: +0.4,
+    education_curriculum: +0.5,
   },
   plaid: {
     immigration_control: -0.3,
@@ -108,6 +151,10 @@ export const PARTY_POLICY_STANCES: Record<string, Partial<Record<PolicyKey, numb
     nhs_free_point_of_use: +0.6,
     national_service: -0.5,
     private_provision_public_services: -0.4,
+    taxation_policy: +0.7,
+    crime_policing: -0.2,
+    housing_development: +0.3,
+    education_curriculum: +0.6,
   },
   dup: {
     immigration_control: +0.4,
@@ -116,6 +163,10 @@ export const PARTY_POLICY_STANCES: Record<string, Partial<Record<PolicyKey, numb
     nhs_free_point_of_use: +0.3,
     national_service: +0.6,
     private_provision_public_services: +0.3,
+    taxation_policy: -0.1,
+    crime_policing: +0.4,
+    housing_development: +0.2,
+    education_curriculum: -0.3,
   },
   sinnfein: {
     immigration_control: -0.4,
@@ -124,6 +175,10 @@ export const PARTY_POLICY_STANCES: Record<string, Partial<Record<PolicyKey, numb
     nhs_free_point_of_use: +0.7,
     national_service: -0.7,
     private_provision_public_services: -0.5,
+    taxation_policy: +0.6,
+    crime_policing: -0.4,
+    housing_development: +0.3,
+    education_curriculum: +0.4,
   },
   alliance: {
     immigration_control: -0.2,
@@ -132,6 +187,10 @@ export const PARTY_POLICY_STANCES: Record<string, Partial<Record<PolicyKey, numb
     nhs_free_point_of_use: +0.5,
     national_service: -0.4,
     private_provision_public_services: -0.2,
+    taxation_policy: +0.4,
+    crime_policing: -0.3,
+    housing_development: +0.4,
+    education_curriculum: +0.5,
   },
   sdlp: {
     immigration_control: -0.3,
@@ -140,6 +199,10 @@ export const PARTY_POLICY_STANCES: Record<string, Partial<Record<PolicyKey, numb
     nhs_free_point_of_use: +0.6,
     national_service: -0.5,
     private_provision_public_services: -0.3,
+    taxation_policy: +0.5,
+    crime_policing: -0.2,
+    housing_development: +0.3,
+    education_curriculum: +0.4,
   },
   uup: {
     immigration_control: +0.3,
@@ -148,6 +211,10 @@ export const PARTY_POLICY_STANCES: Record<string, Partial<Record<PolicyKey, numb
     nhs_free_point_of_use: +0.4,
     national_service: +0.4,
     private_provision_public_services: +0.2,
+    taxation_policy: -0.1,
+    crime_policing: +0.3,
+    housing_development: +0.2,
+    education_curriculum: -0.1,
   },
 };
 
@@ -163,6 +230,21 @@ const QUESTION_DESIRED_SIGN: Record<string, number> = {
   welfare_4: -1,     // extreme agree => shift costs private
   auth_6: +1,        // extreme agree => national service
   econ_2: +1,        // extreme agree => private provision ok
+
+  // NEW: Taxation
+  econ_3: +1,        // extreme agree => raise minimum wage = pro-redistribution
+  econ_4: -1,        // extreme agree => lower taxes = anti-redistribution
+
+  // NEW: Crime & Policing
+  auth_3: +1,        // extreme agree => more police power for public order
+  auth_4: -1,        // extreme agree => protect privacy over police powers
+
+  // NEW: Housing Development
+  sovereign_8: +1,   // extreme agree => prioritize national interests (housing development)
+
+  // NEW: Education Curriculum
+  social_4: +1,      // extreme agree => immigration benefits (diverse curriculum)
+  social_5: +1,      // extreme agree => diverse family structures (inclusive education)
 };
 
 // ------------- API -------------
