@@ -39,11 +39,12 @@ function calculateRawAxisScore(
   answers: Answer[],
   questions: Question[],
   importanceWeights?: Record<string, number>
-): { score: number; totalWeight: number; answeredWeight: number; absoluteWeightSum: number } {
+): { score: number; totalWeight: number; answeredWeight: number; absoluteWeightSum: number; answeredAbsoluteWeight: number } {
   let totalScore = 0;
   let totalWeight = 0;
   let answeredWeight = 0;
   let absoluteWeightSum = 0;
+  let answeredAbsoluteWeight = 0;
 
   // Get questions that target this axis
   const axisQuestions = questions.filter(q => 
@@ -67,10 +68,11 @@ function calculateRawAxisScore(
       const questionScore = mapLikertToScore(answer.value); // answer.value should already be 1-7
       totalScore += questionScore * adjustedWeight;
       answeredWeight += adjustedWeight;
+      answeredAbsoluteWeight += Math.abs(adjustedWeight);
     }
   }
 
-  return { score: totalScore, totalWeight, answeredWeight, absoluteWeightSum };
+  return { score: totalScore, totalWeight, answeredWeight, absoluteWeightSum, answeredAbsoluteWeight };
 }
 
 /**
@@ -86,7 +88,13 @@ function normalizeScore(rawScore: number, maxPossibleScore: number): number {
 /**
  * Calculates confidence percentage for an axis
  */
-function calculateConfidence(answeredWeight: number, totalWeight: number): number {
+function calculateConfidence(answeredWeight: number, totalWeight: number, absoluteWeightSum: number, answeredAbsoluteWeight: number): number {
+  // When total weight is 0 (balanced positive/negative weights), use absolute weight sum
+  if (totalWeight === 0) {
+    if (absoluteWeightSum === 0) return 0;
+    return Math.round((answeredAbsoluteWeight / absoluteWeightSum) * 100);
+  }
+  
   if (totalWeight === 0) return 0;
   return Math.round((answeredWeight / totalWeight) * 100);
 }
@@ -94,7 +102,13 @@ function calculateConfidence(answeredWeight: number, totalWeight: number): numbe
 /**
  * Checks if there's sufficient data coverage for an axis
  */
-function hasSufficientCoverage(answeredWeight: number, totalWeight: number): boolean {
+function hasSufficientCoverage(answeredWeight: number, totalWeight: number, absoluteWeightSum: number, answeredAbsoluteWeight: number): boolean {
+  // When total weight is 0 (balanced positive/negative weights), use absolute weight sum
+  if (totalWeight === 0) {
+    if (absoluteWeightSum === 0) return false;
+    return (answeredAbsoluteWeight / absoluteWeightSum) >= MIN_COVERAGE_PERCENTAGE;
+  }
+  
   if (totalWeight === 0) return false;
   return (answeredWeight / totalWeight) >= MIN_COVERAGE_PERCENTAGE;
 }
@@ -112,7 +126,7 @@ export function calculateScores(session: QuizSession): ScoringResult {
   let overallConfidence = 0;
 
   for (const axisId of AXIS_IDS) {
-    const { score: rawScore, totalWeight, answeredWeight, absoluteWeightSum } = calculateRawAxisScore(
+    const { score: rawScore, totalWeight, answeredWeight, absoluteWeightSum, answeredAbsoluteWeight } = calculateRawAxisScore(
       axisId,
       answers,
       questions,
@@ -123,8 +137,8 @@ export function calculateScores(session: QuizSession): ScoringResult {
     // Use absolute sum of weights to handle balanced positive/negative weights
     const maxPossibleScore = absoluteWeightSum * 3; // Maximum score per question is 3
     const normalizedScore = normalizeScore(rawScore, maxPossibleScore);
-    const confidence = calculateConfidence(answeredWeight, totalWeight);
-    const hasSufficientData = hasSufficientCoverage(answeredWeight, totalWeight);
+    const confidence = calculateConfidence(answeredWeight, totalWeight, absoluteWeightSum, answeredAbsoluteWeight);
+    const hasSufficientData = hasSufficientCoverage(answeredWeight, totalWeight, absoluteWeightSum, answeredAbsoluteWeight);
 
     scores.push({
       axis: axisId as any,
