@@ -106,3 +106,7 @@ dist
 # Temporary folders
 tmp/
 temp/
+
+# Playwright
+test-results/
+Playwright-report/

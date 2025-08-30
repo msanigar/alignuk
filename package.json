@@ -10,7 +10,17 @@
     "lint": "next lint",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:validation": "tsx scripts/runValidationTests.ts"
+    "test:validation": "tsx scripts/runValidationTests.ts",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:headed": "playwright test --headed",
+    "test:visual": "percy exec -- playwright test --grep @visual",
+    "test:visual:update": "percy exec -- playwright test --grep @visual --update-snapshots",
+    "test:all": "npm run test && npm run test:e2e",
+    "test:visual:analysis": "npm run test:visual && node scripts/generate-visual-analysis.js",
+    "test:visual:headed": "playwright test --grep @visual --headed",
+    "playwright:install": "playwright install",
+    "playwright:codegen": "playwright codegen http://localhost:3001"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.38.4",
@@ -25,6 +35,8 @@
     "recharts": "^2.8.0"
   },
   "devDependencies": {
+    "@percy/cli": "^1.27.4",
+    "@playwright/test": "^1.40.1",
     "@types/node": "^20.9.0",
     "@types/react": "^18.2.37",
     "@types/react-dom": "^18.2.15",
