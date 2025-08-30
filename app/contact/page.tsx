@@ -222,9 +222,13 @@ export default function ContactPage() {
                   id="name"
                   name="name"
                   required
+                  aria-describedby="name-help"
                   className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                   placeholder="Your name"
                 />
+                <div id="name-help" className="mt-1 text-sm text-neutral-500">
+                  Please enter your full name
+                </div>
               </div>
               
               <div>
@@ -236,9 +240,13 @@ export default function ContactPage() {
                   id="email"
                   name="email"
                   required
+                  aria-describedby="email-help"
                   className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                   placeholder="your.email@example.com"
                 />
+                <div id="email-help" className="mt-1 text-sm text-neutral-500">
+                  We'll use this to respond to your inquiry
+                </div>
               </div>
             </div>
             

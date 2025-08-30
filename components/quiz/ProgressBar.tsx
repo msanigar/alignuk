@@ -17,11 +17,18 @@ export function ProgressBar({ current, total }: ProgressBarProps) {
           Progress
         </span>
         <span className="text-xs sm:text-sm text-neutral-500">
-          {current} of {total}
+          Question {current} of {total}
         </span>
       </div>
       
-      <div className="progress-bar">
+      <div 
+        className="progress-bar"
+        role="progressbar"
+        aria-valuenow={current}
+        aria-valuemin={1}
+        aria-valuemax={total}
+        aria-label={`Question ${current} of ${total}`}
+      >
         <motion.div
           className="progress-fill"
           initial={{ width: 0 }}
@@ -31,8 +38,13 @@ export function ProgressBar({ current, total }: ProgressBarProps) {
       </div>
       
       <div className="flex justify-between text-xs text-neutral-400 mt-1">
-        <span>0%</span>
-        <span>100%</span>
+        <span>Start</span>
+        <span>Complete</span>
+      </div>
+      
+      {/* Progress percentage for screen readers */}
+      <div className="sr-only">
+        {Math.round(percentage)}% complete
       </div>
     </div>
   );
